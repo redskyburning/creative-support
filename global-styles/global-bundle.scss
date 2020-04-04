@@ -1,0 +1,11 @@
+// This file contains all scss that composes the global bundle. Currently it houses the bulma/buefy core, but it can contain any rendering scss that is intended for all pages.
+
+// Non-rendering user-defined includes come in here, including defaults for buefy/bulma.
+@import "global-includes";
+
+// Import Bulma and Buefy styles. Bulma/Buefy defaults from includes will override the defaults in these scss files, theming Bulma/Buefy.
+@import "~bulma";
+@import "~buefy/src/scss/buefy";
+
+// Once Bulma/Buefy is in place we can apply extra code on top. These are intended to extend or modify Bulma/Buefy core, and should not contain random custom code.
+@import "bulma-overrides";
