@@ -2,36 +2,36 @@
 	<div class="app container">
 		<nav class="navbar app-nav">
 			<div class="app-nav__start">
-        <b-navbar-item
-          class="app-nav__menu"
-          href="#"
-        >
-          <span />
-          <span />
-          <span />
-        </b-navbar-item>
-        <b-navbar-item
-          class="app-nav__support"
-          href="#"
-        >
-          Register for Support
-        </b-navbar-item>
+				<b-navbar-item
+					class="app-nav__menu"
+					href="#"
+				>
+					<span />
+					<span />
+					<span />
+				</b-navbar-item>
+				<b-navbar-item
+					class="app-nav__support"
+					href="#"
+				>
+					Register for Support
+				</b-navbar-item>
 			</div>
 			<div class="app-nav__middle">
 				Creative Support
 			</div>
 			<div class="app-nav__end">
 				<b-navbar-item
-          class="app-nav__faq"
+					class="app-nav__faq"
 					href="#"
 				>
 					How it works / Faq
 				</b-navbar-item>
 				<b-navbar-item
-          class="app-nav__home"
+					class="app-nav__home"
 					href="#"
 				>
-          <b-icon icon="home" />
+					<b-icon icon="home" />
 				</b-navbar-item>
 			</div>
 		</nav>

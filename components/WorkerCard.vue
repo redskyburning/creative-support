@@ -45,9 +45,7 @@
 				</a>
 			</div>
 
-			<div class="worker-card__description content">
-				{{ worker.description }}
-			</div>
+			<div class="worker-card__description content" v-html="worker.description" />
 
 			<div class="worker-card__donations-buttons buttons">
 				<b-button
@@ -169,16 +167,6 @@ import { mockWorker } from '../mocks';
 
 export default {
 	name: 'WorkerCard',
-	props: {
-		title: {
-			type: String,
-			required: true,
-		},
-		icon: {
-			type: String,
-			required: true,
-		},
-	},
 	data() {
 		return {
 			worker: mockWorker,

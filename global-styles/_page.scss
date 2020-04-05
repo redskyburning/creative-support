@@ -2,11 +2,11 @@
 	padding:1rem $section-padding-horizontal $section-padding-vertical;
 
 	> * + * {
+		margin-top:$section-padding-vertical;
 	}
 
   &__header {
     text-align:center;
-		margin-bottom:$section-padding-vertical;
 
     .title {
       span {

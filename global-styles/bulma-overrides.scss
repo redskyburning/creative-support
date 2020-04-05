@@ -17,4 +17,9 @@
 .button {
 	font-weight:$weight-bold;
 	letter-spacing: .01em;
+
+	&.is-chunky-serif {
+		font-family:$family-serif;
+		border-width:3px;
+	}
 }
