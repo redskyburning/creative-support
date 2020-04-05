@@ -7,7 +7,9 @@
 		</div>
 		<div class="page__body content">
 			<worker-card />
-			<mobile-card-controls class="profiles-bottom__mobile-footer" />
+			<div class="profiles-bottom__mobile-footer">
+				<mobile-card-controls class="" />
+			</div>
 		</div>
 	</section>
 </template>
@@ -24,8 +26,11 @@
 			left:0;
 			right:0;
 			z-index: $navbar-fixed-z;
-			padding:$section-padding-horizontal * .75 $section-padding-horizontal;
 			border-top:2px solid $border;
+
+			.mobile-card-controls {
+				padding:$section-padding-horizontal * .75 $section-padding-horizontal;
+			}
 		}
 	}
 </style>

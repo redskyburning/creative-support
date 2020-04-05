@@ -29,7 +29,7 @@
 				</b-navbar-item>
 				<b-navbar-item
 					class="app-nav__home"
-					href="#"
+					href="/"
 				>
 					<b-icon icon="home" />
 				</b-navbar-item>
@@ -66,6 +66,23 @@
 
       &__menu {
         @include hamburger(50px);
+
+				/*span {
+					height:3px;
+					width:25px;
+
+					&:nth-child(1) {
+						top: calc(50% - 9px)
+					}
+
+					&:nth-child(2) {
+						top: calc(50% - 1px)
+					}
+
+					&:nth-child(3) {
+						top: calc(50% + 7px)
+					}
+				}*/
       }
 
       &__home,
@@ -77,8 +94,9 @@
 
       &__middle {
         color:$red;
-        font-size:$size-3;
+        font-size:$size-4;
         font-weight:$weight-bold;
+				line-height:1em;
       }
     }
   }
