@@ -13,6 +13,8 @@
 			class="is-chunky-serif"
 			size="is-medium"
 			icon-left="help"
+			tag="nuxt-link"
+			to="/about"
 		/>
 		<b-button
 			type="is-turq"

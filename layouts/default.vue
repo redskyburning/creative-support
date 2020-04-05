@@ -4,7 +4,8 @@
 			<div class="app-nav__start">
 				<b-navbar-item
 					class="app-nav__menu"
-					href="#"
+					:class="{ 'is-active' : toggleActive }"
+					@click="handleToggle"
 				>
 					<span />
 					<span />
@@ -12,18 +13,20 @@
 				</b-navbar-item>
 				<b-navbar-item
 					class="app-nav__support"
-					href="#"
+					tag="nuxt-link"
+					to="/register"
 				>
 					Register for Support
 				</b-navbar-item>
 			</div>
 			<div class="app-nav__middle">
-				Creative Support
+				<nuxt-link to="/">Creative Support</nuxt-link>
 			</div>
 			<div class="app-nav__end">
 				<b-navbar-item
 					class="app-nav__faq"
-					href="#"
+					tag="nuxt-link"
+					to="/faq"
 				>
 					How it works / Faq
 				</b-navbar-item>
@@ -97,6 +100,10 @@
         font-size:$size-4;
         font-weight:$weight-bold;
 				line-height:1em;
+
+				a {
+					@include link-inherit-color;
+				}
       }
     }
   }
@@ -106,6 +113,7 @@
 export default {
 	data() {
 		return {
+			toggleActive: false,
 			items: [
 				{
 					title: 'Home',
@@ -119,6 +127,11 @@ export default {
 				},
 			],
 		};
+	},
+	methods: {
+		handleToggle() {
+			this.toggleActive = !this.toggleActive;
+		},
 	},
 };
 </script>
