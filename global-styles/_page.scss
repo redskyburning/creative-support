@@ -2,12 +2,20 @@
   &__header {
     text-align:center;
 
-    /*.title {
+
+    .title {
       span {
+        $bleed:1.5rem;
+        display:inline-block;
         white-space: nowrap;
-        //background-color:$yellow;
-        background-image: linear-gradient(left, $yellow);
+        background-image: linear-gradient(to left, $yellow);
+        background-size:95% 25%;
+        background-repeat: no-repeat;
+        background-position-x: center;
+        background-position-y: 65%;
+        margin:$bleed * -1;
+        padding:$bleed;
       }
-    }*/
+    }
   }
 }

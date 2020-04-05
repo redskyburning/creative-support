@@ -1,24 +1,44 @@
 <template>
 	<div class="app container">
-		<nav class="app-nav">
+		<nav class="navbar app-nav">
 			<div class="app-nav__start">
-				<button class="app-nav__burger">
-					<span />
-					<span />
-					<span />
-				</button>
+        <b-navbar-item
+          class="app-nav__menu"
+          href="#"
+        >
+          <span />
+          <span />
+          <span />
+        </b-navbar-item>
+        <b-navbar-item
+          class="app-nav__support"
+          href="#"
+        >
+          Register for Support
+        </b-navbar-item>
 			</div>
 			<div class="app-nav__middle">
-				testy
+				Creative Support
 			</div>
 			<div class="app-nav__end">
-				test
+				<b-navbar-item
+          class="app-nav__faq"
+					href="#"
+				>
+					How it works / Faq
+				</b-navbar-item>
+				<b-navbar-item
+          class="app-nav__home"
+					href="#"
+				>
+          <b-icon icon="home" />
+				</b-navbar-item>
 			</div>
 		</nav>
 
-    <div class="app__body">
-      <nuxt />
-    </div>
+		<div class="app__body">
+			<nuxt />
+		</div>
 	</div>
 </template>
 
@@ -29,13 +49,36 @@
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      padding:0 $navbar-padding-horizontal;
 
       &__burger {
         $burger-size:50px;
         border:0;
         @include hamburger($burger-size);
         padding:$button-padding-vertical;
+      }
+
+      &__support,
+      &__faq, {
+        @include until($desktop) {
+          display:none;
+        }
+      }
+
+      &__menu {
+        @include hamburger(50px);
+      }
+
+      &__home,
+      &__menu {
+        @include from($desktop) {
+          display:none;
+        }
+      }
+
+      &__middle {
+        color:$red;
+        font-size:$size-3;
+        font-weight:$weight-bold;
       }
     }
   }

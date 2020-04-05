@@ -3,3 +3,9 @@
   font-weight: $weight-bold;
   letter-spacing: 0;
 }
+
+.navbar-item,
+.navbar-link {
+  padding: 1rem 0.75rem;
+  font-weight:$weight-bold;
+}
