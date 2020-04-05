@@ -3,13 +3,17 @@
 		<nav class="navbar app-nav">
 			<div class="app-nav__start">
 				<b-navbar-item
-					class="app-nav__menu"
-					:class="{ 'is-active' : toggleActive }"
+					class="app-nav__item-menu"
 					@click="handleToggle"
 				>
-					<span />
-					<span />
-					<span />
+					<div
+						class="app-nav__menu"
+						:class="{ 'is-active' : toggleActive }"
+					>
+						<span />
+						<span />
+						<span />
+					</div>
 				</b-navbar-item>
 				<b-navbar-item
 					class="app-nav__support"
@@ -20,7 +24,9 @@
 				</b-navbar-item>
 			</div>
 			<div class="app-nav__middle">
-				<nuxt-link to="/">Creative Support</nuxt-link>
+				<nuxt-link to="/">
+					Creative Support
+				</nuxt-link>
 			</div>
 			<div class="app-nav__end">
 				<b-navbar-item
@@ -42,6 +48,11 @@
 		<div class="app__body">
 			<nuxt />
 		</div>
+
+		<mobile-drawer
+			class="app__drawer"
+			:class="{ 'is-active' : toggleActive }"
+		/>
 	</div>
 </template>
 
@@ -53,13 +64,6 @@
       justify-content: space-between;
       align-items: center;
 
-      &__burger {
-        $burger-size:50px;
-        border:0;
-        @include hamburger($burger-size);
-        padding:$button-padding-vertical;
-      }
-
       &__support,
       &__faq, {
         @include until($desktop) {
@@ -68,7 +72,7 @@
       }
 
       &__menu {
-        @include hamburger(50px);
+        @include hamburger(28px);
 
 				/*span {
 					height:3px;
@@ -106,14 +110,36 @@
 				}
       }
     }
+
+		&__drawer {
+			background:$white-bis;
+			position:fixed;
+			top:$navbar-height;
+			bottom:0;
+			left:-120%;
+			width:100%;
+			z-index: $navbar-fixed-z;
+			transition:left ease-in-out .25s;
+
+			&.is-active {
+				left:0;
+			}
+		}
   }
 </style>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue';
+
+import MobileDrawer from '@/components/MobileDrawer.vue';
+
+export default Vue.extend({
+	components: {
+		MobileDrawer,
+	},
 	data() {
 		return {
-			toggleActive: false,
+			toggleActive: true,
 			items: [
 				{
 					title: 'Home',
@@ -133,5 +159,5 @@ export default {
 			this.toggleActive = !this.toggleActive;
 		},
 	},
-};
+});
 </script>
