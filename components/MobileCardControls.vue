@@ -37,6 +37,11 @@
 
 		.button {
 			color:$text !important;
+
+			&:first-child,
+			&:last-child {
+				min-width: 115px;
+			}
 		}
 	}
 </style>

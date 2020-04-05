@@ -49,10 +49,12 @@
 			<nuxt />
 		</div>
 
-		<mobile-drawer
-			class="app__drawer"
-			:class="{ 'is-active' : toggleActive }"
-		/>
+		<transition name="app__drawer">
+			<mobile-drawer
+				v-if="toggleActive"
+				class="app__drawer"
+			/>
+		</transition>
 	</div>
 </template>
 
@@ -112,17 +114,19 @@
     }
 
 		&__drawer {
-			background:$white-bis;
+			$duration:.25s;
+			background:$white;
 			position:fixed;
 			top:$navbar-height;
 			bottom:0;
-			left:-120%;
+			left:0;
 			width:100%;
 			z-index: $navbar-fixed-z;
-			transition:left ease-in-out .25s;
+			transition:left ease-in-out $duration;
 
-			&.is-active {
-				left:0;
+			&-leave-to,
+			&-enter {
+				left:-120%;
 			}
 		}
   }
@@ -139,7 +143,7 @@ export default Vue.extend({
 	},
 	data() {
 		return {
-			toggleActive: true,
+			toggleActive: false,
 			items: [
 				{
 					title: 'Home',
@@ -153,6 +157,11 @@ export default Vue.extend({
 				},
 			],
 		};
+	},
+	watch: {
+		$route() {
+			this.toggleActive = false;
+		},
 	},
 	methods: {
 		handleToggle() {
