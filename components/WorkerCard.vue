@@ -5,6 +5,7 @@
 				<span class="worker-card__name">{{ worker.name }},</span>
 				<span class="worker-card__position">{{ worker.position }}</span>
 			</div>
+
 			<div class="worker-card__links">
 				<a
 					v-if="worker.instagramUrl"
@@ -43,7 +44,11 @@
 					Other Link
 				</a>
 			</div>
-			<div class="worker-card__description content">{{ worker.description }}</div>
+
+			<div class="worker-card__description content">
+				{{ worker.description }}
+			</div>
+
 			<div class="worker-card__donations-buttons buttons">
 				<b-button
 					v-if="worker.patreonUrl"
@@ -52,6 +57,7 @@
 					:href="worker.patreonUrl"
 					target="_blank"
 					rel="noopener"
+					size="is-medium"
 					expanded
 				>
 					Support on Patreon
@@ -63,6 +69,7 @@
 					:href="worker.paypalUrl"
 					target="_blank"
 					rel="noopener"
+					size="is-medium"
 					expanded
 				>
 					Support on Paypal.me
@@ -74,10 +81,26 @@
 					:href="worker.venmoUrl"
 					target="_blank"
 					rel="noopener"
+					size="is-medium"
 					expanded
 				>
 					Support on Venmo
 				</b-button>
+			</div>
+
+			<div class="worker-card__footer">
+				<a class="worker-card__report" href="#">Report User</a>
+
+				<div
+					v-if="worker.location"
+					class="worker-card__location"
+				>
+					<b-icon
+						icon="map-marker"
+						size="is-small"
+					/>
+					<span>{{ worker.location }}</span>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -86,11 +109,10 @@
 <style lang="scss">
 	.worker-card {
 		.card-content > * + * {
-			margin-top:1rem;
+			margin-top:1.2rem;
 		}
 
 		&__title {
-			margin-bottom:.75rem;
 			text-align:center;
 			font-size:$size-5;
 		}
@@ -120,6 +142,23 @@
 			&:nth-child(even) {
 				text-align:right;
 				padding-left:$gap / 2;
+			}
+		}
+
+		&__footer {
+			display:flex;
+			flex-direction: row;
+			justify-content: space-between;
+			font-weight:bold;
+		}
+
+		&__location {
+			display:flex;
+			flex-direction: row;
+			align-items: center;
+
+			> * + * {
+				margin-left:.2rem;
 			}
 		}
 	}
