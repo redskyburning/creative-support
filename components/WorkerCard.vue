@@ -106,6 +106,33 @@
 
 <style lang="scss">
 	.worker-card {
+		position: relative;
+
+		&::before,
+		&::after {
+			content:'';
+			display:block;
+			position: absolute;
+			height:10%;
+			border:2px solid $grey;
+			background-color:$white;
+			z-index: -1;
+		}
+
+		&::after {
+			$width:95%;
+			width:$width;
+			bottom:-7px;
+			left:(100% - $width) / 2;
+		}
+
+		&::before {
+			$width:90%;
+			width:$width;
+			bottom:-12px;
+			left:(100% - $width) / 2;
+		}
+
 		.card-content > * + * {
 			margin-top:1.2rem;
 		}
