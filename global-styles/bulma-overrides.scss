@@ -1,0 +1,29 @@
+// If there's something in Bulma/Buefy that needs to be modified or extended, that code goes here. This file should not contain random global things.
+.title {
+  font-weight: $weight-bold;
+  letter-spacing: 0;
+}
+
+.navbar-item,
+.navbar-link {
+  padding: 1rem 0.75rem;
+  font-weight:$weight-bold;
+}
+
+.card {
+	border:$card-border;
+}
+
+.button {
+	font-weight:$weight-bold;
+	letter-spacing: .01em;
+
+	&.is-chunky-serif {
+		font-family:$family-serif;
+		border-width:3px;
+	}
+}
+
+.menu {
+	font-family:$family-sans-serif;
+}

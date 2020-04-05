@@ -1,0 +1,40 @@
+// Colors
+
+$black:        hsl(0, 0%, 0%);
+$black-bis:    hsl(0, 0%, 7%);
+$black-ter:    hsl(0, 0%, 14%);
+
+$grey-darker:  hsl(0, 0%, 21%);
+$grey-dark:    hsl(0, 0%, 29%);
+$grey:         hsl(0, 0%, 48%);
+$grey-light:   hsl(0, 0%, 71%);
+$grey-lighter: hsl(0, 0%, 86%);
+
+$white-ter:    hsl(0, 0%, 96%);
+$white-bis:    hsl(0, 0%, 98%);
+$white:        hsl(0, 0%, 100%);
+
+$orange:       hsl(14,  100%, 53%);
+$yellow:       #fffd54;
+$green:        hsl(141, 71%,  48%);
+$turquoise:    #00FFFF;
+$cyan:         hsl(204, 86%,  53%);
+$blue:         hsl(217, 71%,  53%);
+$purple:       hsl(271, 100%, 71%);
+$red:          #E85B46;
+$magenta:#FF00FF;
+$paypal-blue:#003087;
+$venmo-blue:#3D95CE;
+
+$text:$black;
+$primary:$red;
+$border:$black;
+
+$custom-colors: (
+	mage: ($magenta, $white),
+	turq: ($turquoise, $white),
+	yella: ($yellow, $white),
+	patreon : ($red, $white),
+	paypal: ($paypal-blue, $white),
+	venmo: ($venmo-blue, $white),
+);

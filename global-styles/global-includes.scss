@@ -1,0 +1,7 @@
+// This file gathers non-rendering scss that will be included in every component, as well as being used in the global bundle. It is suuuuuuuper important that the scss in this file does not render anything! If it does css will be duplicated in every component.
+
+@import "variables";
+@import "mixins";
+@import "fonts";
+@import "colors";
+@import "bulma-includes";

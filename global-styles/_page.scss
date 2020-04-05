@@ -1,0 +1,26 @@
+.page {
+	padding:1rem $section-padding-horizontal $section-padding-vertical;
+
+	> * + * {
+		margin-top:$section-padding-vertical;
+	}
+
+  &__header {
+    text-align:center;
+
+    .title {
+      span {
+        $bleed:1.5rem;
+        display:inline-block;
+        white-space: nowrap;
+        background-image: linear-gradient(to left, $yellow);
+        background-size:95% 25%;
+        background-repeat: no-repeat;
+        background-position-x: center;
+        background-position-y: 65%;
+        margin:$bleed * -1;
+        padding:$bleed;
+      }
+    }
+  }
+}

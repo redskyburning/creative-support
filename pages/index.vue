@@ -1,53 +1,41 @@
 <template>
-  <section class="section">
-    <div class="columns is-mobile">
-      <card
-        title="Free"
-        icon="github-circle"
-      >
-        Open source on <a href="https://github.com/buefy/buefy">
-          GitHub
-        </a>
-      </card>
-
-      <card
-        title="Responsive"
-        icon="cellphone-link"
-      >
-        <b class="has-text-grey">
-          Every
-        </b> component is responsive
-      </card>
-
-      <card
-        title="Modern"
-        icon="alert-decagram"
-      >
-        Built with <a href="https://vuejs.org/">
-          Vue.js
-        </a> and <a href="http://bulma.io/">
-          Bulma
-        </a>
-      </card>
-
-      <card
-        title="Lightweight"
-        icon="arrange-bring-to-front"
-      >
-        No other internal dependency
-      </card>
-    </div>
-  </section>
+	<section class="profiles page">
+		<div class="page__header ">
+			<h1 class="title">
+				<span>Help Metro Atlanta’s</span> <span>creative workers.</span>
+			</h1>
+		</div>
+		<div class="page__body content">
+			<mobile-card-controls class="profiles__mobile-ui" />
+			<worker-card />
+		</div>
+	</section>
 </template>
 
-<script>
-import Card from '~/components/Card'
+<style lang="scss">
+	.profiles {
+		.page__body {
+			margin-top: .5rem;
+		}
 
-export default {
-  name: 'HomePage',
+		&__mobile-ui {
+			position:sticky;
+			top:0;
+			z-index: $navbar-fixed-z;
+		}
+	}
+</style>
 
-  components: {
-    Card
-  }
-}
+<script lang="ts">
+import Vue from 'vue';
+import WorkerCard from '@/components/WorkerCard.vue';
+import MobileCardControls from '~/components/MobileCardControls.vue';
+
+export default Vue.extend({
+	name: 'HomePage',
+	components: {
+		WorkerCard,
+		MobileCardControls,
+	},
+});
 </script>

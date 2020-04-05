@@ -1,0 +1,56 @@
+@function calc-grid-dimension($items-per-row,$item-spacing) {
+	$item-base-width:100% / $items-per-row;
+	$per-item-spacing:(($items-per-row - 1) * $item-spacing) / $items-per-row;
+
+	@return calc(#{$item-base-width} - #{$per-item-spacing});
+}
+
+@function calc-grid-dimension-marginal($items-per-row,$item-spacing) {
+	$item-base-width:100% / $items-per-row;
+
+	@return calc(#{$item-base-width} - #{$item-spacing});
+}
+
+@mixin undecorated-link() {
+	&, &:hover, &:link, &:active, &:visited {
+		text-decoration: none;
+	}
+}
+
+@mixin link-inherit-color() {
+	&, &:hover, &:link, &:active, &:visited {
+		color:inherit;
+	}
+}
+
+@mixin single-color-link($color) {
+	&, &:hover, &:link, &:active, &:visited {
+		color:$color;
+	}
+}
+
+@mixin responsive-image() {
+	display:block;
+	width:100%;
+	height:auto;
+}
+
+@mixin grid-item($per-row,$spacing) {
+	width:calc-grid-dimension($per-row,$spacing);
+	margin-right:$spacing;
+	margin-bottom:$spacing;
+
+	&:nth-child(#{$per-row}n) {
+		margin-right:0;
+	}
+}
+
+@mixin overlay-text-shadow() {
+	text-shadow: 0 0 .2em rgba(0, 0, 0, .5);
+}
+
+@mixin between($from-size, $to-size) {
+	@media screen and (min-width: $from-size) and (max-width: $to-size - 1px) {
+		@content
+	}
+}
