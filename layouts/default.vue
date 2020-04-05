@@ -1,56 +1,45 @@
 <template>
-	<div>
-		<nav
-			class="navbar header has-shadow is-primary"
-			role="navigation"
-			aria-label="main navigation"
-		>
-			<div class="navbar-brand">
-				<a
-					class="navbar-item"
-					href="/"
-				>
-					<img
-						src="~assets/buefy.png"
-						alt="Buefy"
-						height="28"
-					>
-				</a>
-
-				<div class="navbar-burger">
+	<div class="app container">
+		<nav class="app-nav">
+			<div class="app-nav__start">
+				<button class="app-nav__burger">
 					<span />
 					<span />
 					<span />
-				</div>
+				</button>
+			</div>
+			<div class="app-nav__middle">
+				testy
+			</div>
+			<div class="app-nav__end">
+				test
 			</div>
 		</nav>
 
-		<section class="main-content columns">
-			<aside class="column is-2 section">
-				<p class="menu-label is-hidden-touch">
-					General
-				</p>
-				<ul class="menu-list">
-					<li
-						v-for="(item, key) of items"
-						:key="key"
-					>
-						<nuxt-link
-							:to="item.to"
-							exact-active-class="is-active"
-						>
-							<b-icon :icon="item.icon" /> {{ item.title }}
-						</nuxt-link>
-					</li>
-				</ul>
-			</aside>
-
-			<div class="container column is-10">
-				<nuxt />
-			</div>
-		</section>
+    <div class="app__body">
+      <nuxt />
+    </div>
 	</div>
 </template>
+
+<style lang="scss">
+  .app {
+    &-nav {
+      display:flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding:0 $navbar-padding-horizontal;
+
+      &__burger {
+        $burger-size:50px;
+        border:0;
+        @include hamburger($burger-size);
+        padding:$button-padding-vertical;
+      }
+    }
+  }
+</style>
 
 <script>
 export default {

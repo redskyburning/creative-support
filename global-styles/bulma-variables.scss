@@ -1,3 +1,11 @@
 // Bulma/Buefy variables which need to be defaulted go here. These variables should not be reliant on values in Bulma/Buefy as they will be included before those values exist. New variables used in bulma-overrides should go in here as well, but variables that have nothing to do with Bulma/Buefy belong in variables.scss.
 
 $family-primary: $courier-new;
+
+$navbar-padding-vertical: 1rem;
+$navbar-padding-horizontal: 2rem;
+
+$control-border-width: 1px;
+$button-border-width: $control-border-width;
+$button-padding-vertical: calc(0.375em - #{$button-border-width});
+$button-padding-horizontal: 0.75em;
