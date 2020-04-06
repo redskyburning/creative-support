@@ -17,6 +17,11 @@
 					label="FAQs"
 					to="/faq"
 				/>
+				<b-menu-item
+					tag="nuxt-link"
+					label="Privacy Policy"
+					to="/privacy"
+				/>
 			</b-menu-list>
 		</b-menu>
 		<div class="content mobile-drawer__disclaimer">
