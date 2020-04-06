@@ -107,6 +107,7 @@
 <style lang="scss">
 	.worker-card {
 		position: relative;
+		margin-bottom:10px;
 
 		&::before,
 		&::after {

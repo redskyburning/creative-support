@@ -9,6 +9,7 @@
 			<div class="profiles__main">
 				<mobile-card-controls class="profiles__mobile-ui" />
 				<worker-card />
+				<mega-shuffle class="profiles__mega-shuffle" />
 			</div>
 			<div class="profiles__extras">
 				<worker-filter class="profiles__filters" />
@@ -20,7 +21,7 @@
 <style lang="scss">
 	.profiles {
 		&__body {
-			margin-top:$section-padding-horizontal;
+			margin-top:$gap;
 			display:flex;
 			flex-direction: row;
 			align-items: stretch;
@@ -35,7 +36,11 @@
 			position:sticky;
 			top:0;
 			z-index: $navbar-fixed-z;
-			margin-bottom:$section-padding-horizontal;
+			margin-bottom:$gap;
+		}
+
+		&__mega-shuffle {
+			margin-top:$gap;
 		}
 
 		&__filters {
@@ -43,12 +48,17 @@
 		}
 
 		@include until($desktop) {
+			&__mega-shuffle,
 			&__extras {
 				display:none;
 			}
 		}
 
 		@include from($desktop) {
+			&__body {
+				margin-top:$section-padding-vertical;
+			}
+
 			&__main {
 				max-width:400px;
 			}
@@ -65,6 +75,7 @@ import Vue from 'vue';
 import WorkerCard from '@/components/WorkerCard.vue';
 import MobileCardControls from '~/components/MobileCardControls.vue';
 import WorkerFilter from '~/components/WorkerFilter.vue';
+import MegaShuffle from '~/components/MegaShuffle.vue';
 
 export default Vue.extend({
 	name: 'HomePage',
@@ -72,6 +83,7 @@ export default Vue.extend({
 		WorkerCard,
 		MobileCardControls,
 		WorkerFilter,
+		MegaShuffle,
 	},
 });
 </script>

@@ -46,6 +46,7 @@
 	.worker-filter {
 		&__filters {
 			background-color:$black;
+			height:100%;
 		}
 
 		.checkbox {
