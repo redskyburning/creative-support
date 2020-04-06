@@ -33,7 +33,6 @@
 		flex-direction: row;
 		justify-content: space-between;
 		background-color:$white;
-		padding:$section-padding-horizontal 0;
 
 		.button {
 			color:$text !important;
