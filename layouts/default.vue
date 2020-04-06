@@ -23,7 +23,7 @@
 					Register for Support
 				</b-navbar-item>
 			</div>
-			<div class="app-nav__middle">
+			<div class="app-nav__app-name">
 				<nuxt-link to="/">
 					Creative Support
 				</nuxt-link>
@@ -49,6 +49,34 @@
 			<nuxt />
 		</div>
 
+		<nav class="navbar app-nav app__footer">
+			<b-navbar-item
+				tag="nuxt-link"
+				to="/privacy"
+			>
+				Privacy Policy
+			</b-navbar-item>
+			<b-navbar-item
+				tag="nuxt-link"
+				to="/about"
+			>
+				About Us
+			</b-navbar-item>
+			<b-navbar-item
+				class="app-nav__made"
+				tag="nuxt-link"
+				to="/register"
+			>
+				Made w/ Heart in ATL
+			</b-navbar-item>
+			<b-navbar-item>
+				Tweet Us
+			</b-navbar-item>
+			<b-navbar-item>
+				Live Analytics
+			</b-navbar-item>
+		</nav>
+
 		<transition name="app__drawer">
 			<mobile-drawer
 				v-if="toggleActive"
@@ -65,13 +93,6 @@
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-
-      &__support,
-      &__faq, {
-        @include until($desktop) {
-          display:none;
-        }
-      }
 
       &__menu {
         @include hamburger(28px);
@@ -94,14 +115,8 @@
 				}*/
       }
 
-      &__home,
-      &__menu {
-        @include from($desktop) {
-          display:none;
-        }
-      }
-
-      &__middle {
+      &__app-name {
+				font-family: $family-serif;
         color:$red;
         font-size:$size-4;
         font-weight:$weight-bold;
@@ -111,6 +126,14 @@
 					@include link-inherit-color;
 				}
       }
+
+			&__made {
+				color:$black;
+				font-family: $family-serif;
+				font-size:$size-5;
+				font-weight:$weight-bold;
+				line-height:1em;
+			}
     }
 
 		&__drawer {
@@ -127,6 +150,32 @@
 			&-leave-to,
 			&-enter {
 				left:-120%;
+			}
+		}
+
+		&__footer {
+			margin-bottom: $section-padding-vertical;
+		}
+
+		@include until($desktop) {
+			&-nav {
+				&__support,
+				&__faq, {
+					display:none;
+				}
+			}
+
+			&__footer {
+				display: none;
+			}
+		}
+
+		@include from($desktop) {
+			&-nav {
+				&__item-menu,
+				&__home {
+					display:none;
+				}
 			}
 		}
   }

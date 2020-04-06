@@ -19,7 +19,7 @@
 		flex-direction: row;
 		justify-content: center;
 		align-items: center;
-		padding:$gap;
+		padding:1.5rem;
 		background-size: auto auto;
 		background-color: rgba(0, 0, 0, 0);
 		background-image: repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(0, 0, 0, 1) 10px, rgba(0, 0, 0, 1) 15px );

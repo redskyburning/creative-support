@@ -7,9 +7,9 @@
 		</div>
 		<div class="page__body profiles__body">
 			<div class="profiles__main">
+				<mega-shuffle class="profiles__mega-shuffle" />
 				<mobile-card-controls class="profiles__mobile-ui" />
 				<worker-card />
-				<mega-shuffle class="profiles__mega-shuffle" />
 			</div>
 			<div class="profiles__extras">
 				<worker-filter class="profiles__filters" />
@@ -32,15 +32,21 @@
 			margin-left:$gap;
 		}
 
+		&__main {
+			> *:not(:last-child) {
+				margin-bottom:$gap;
+			}
+		}
+
 		&__mobile-ui {
 			position:sticky;
 			top:0;
 			z-index: $navbar-fixed-z;
-			margin-bottom:$gap;
+			//margin-bottom:$gap;
 		}
 
 		&__mega-shuffle {
-			margin-top:$gap;
+			//margin-top:$gap;
 		}
 
 		&__filters {
@@ -48,7 +54,7 @@
 		}
 
 		@include until($desktop) {
-			&__mega-shuffle,
+			.mega-shuffle,
 			&__extras {
 				display:none;
 			}
