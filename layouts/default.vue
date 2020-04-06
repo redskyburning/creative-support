@@ -64,10 +64,8 @@
 			</b-navbar-item>
 			<b-navbar-item
 				class="app-nav__made"
-				tag="nuxt-link"
-				to="/register"
 			>
-				Made w/ Heart in ATL
+				<made-with />
 			</b-navbar-item>
 			<b-navbar-item>
 				Tweet Us
@@ -128,11 +126,6 @@
       }
 
 			&__made {
-				color:$black;
-				font-family: $family-serif;
-				font-size:$size-5;
-				font-weight:$weight-bold;
-				line-height:1em;
 			}
     }
 
@@ -185,10 +178,12 @@
 import Vue from 'vue';
 
 import MobileDrawer from '@/components/MobileDrawer.vue';
+import MadeWith from '~/components/MadeWith.vue';
 
 export default Vue.extend({
 	components: {
 		MobileDrawer,
+		MadeWith,
 	},
 	data() {
 		return {
