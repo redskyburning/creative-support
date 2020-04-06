@@ -11,9 +11,7 @@
 				<worker-card />
 			</div>
 			<div class="profiles__extras">
-				<div class="profiles__filters">
-					foo
-				</div>
+				<worker-filter class="profiles__filters" />
 			</div>
 		</div>
 	</section>
@@ -28,12 +26,6 @@
 			align-items: stretch;
 		}
 
-		&__main {
-			> * + * {
-				margin-top:$section-padding-horizontal;
-			}
-		}
-
 		&__extras {
 			flex:1 1 auto;
 			margin-left:$gap;
@@ -43,6 +35,7 @@
 			position:sticky;
 			top:0;
 			z-index: $navbar-fixed-z;
+			margin-bottom:$section-padding-horizontal;
 		}
 
 		&__filters {
@@ -59,10 +52,10 @@
 			&__main {
 				max-width:400px;
 			}
-		}
 
-		&__filters {
-			background:$black;
+			&__mobile-ui {
+				display:none;
+			}
 		}
 	}
 </style>
@@ -71,12 +64,14 @@
 import Vue from 'vue';
 import WorkerCard from '@/components/WorkerCard.vue';
 import MobileCardControls from '~/components/MobileCardControls.vue';
+import WorkerFilter from '~/components/WorkerFilter.vue';
 
 export default Vue.extend({
 	name: 'HomePage',
 	components: {
 		WorkerCard,
 		MobileCardControls,
+		WorkerFilter,
 	},
 });
 </script>
