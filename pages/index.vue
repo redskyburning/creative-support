@@ -45,10 +45,6 @@
 			//margin-bottom:$gap;
 		}
 
-		&__mega-shuffle {
-			//margin-top:$gap;
-		}
-
 		&__filters {
 			height:100%;
 		}
@@ -69,7 +65,7 @@
 				max-width:400px;
 			}
 
-			&__mobile-ui {
+			.mobile-card-controls {
 				display:none;
 			}
 		}
