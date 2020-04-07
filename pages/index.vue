@@ -72,7 +72,7 @@
 	}
 </style>
 
-<script lang="ts">
+<script>
 import Vue from 'vue';
 import WorkerCard from '@/components/WorkerCard.vue';
 import MobileCardControls from '~/components/MobileCardControls.vue';

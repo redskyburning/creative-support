@@ -12,30 +12,16 @@
 
 			<hr>
 
-			<div class="field">
+			<div
+				v-for="category in $store.state.categories"
+				:key="category.id"
+				class="field"
+			>
 				<b-checkbox
 					type="is-yella"
 					size="is-medium"
 				>
-					Art
-				</b-checkbox>
-			</div>
-
-			<div class="field">
-				<b-checkbox
-					type="is-yella"
-					size="is-medium"
-				>
-					Creative Writing
-				</b-checkbox>
-			</div>
-
-			<div class="field">
-				<b-checkbox
-					type="is-yella"
-					size="is-medium"
-				>
-					Dance & Theater
+					{{ category.name }}
 				</b-checkbox>
 			</div>
 		</div>
@@ -81,6 +67,14 @@
 		hr {
 			background-color:$grey-lighter;
 		}
+
+		.field {
+			display:block;
+		}
+
+		.field + .field {
+
+		}
 	}
 </style>
 
@@ -89,5 +83,10 @@ import Vue from 'vue';
 
 export default Vue.extend({
 	name: 'WorkerFilter',
+	data() {
+		return {
+			selectedIds: [],
+		};
+	},
 });
 </script>

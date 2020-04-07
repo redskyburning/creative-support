@@ -1,6 +1,6 @@
 
 export default {
-	mode: 'universal',
+	mode: 'spa',
 	/*
   ** Headers of the page
   */
@@ -48,6 +48,7 @@ export default {
 		'@nuxtjs/axios',
 		// Doc: https://github.com/nuxt-community/dotenv-module
 		'@nuxtjs/dotenv',
+		'@nuxtjs/apollo',
 	],
 	/*
   ** Axios module configuration
@@ -73,5 +74,13 @@ export default {
 		scss: [
 			'./global-styles/global-includes.scss',
 		],
+	},
+	apollo: {
+		clientConfigs: {
+			default: {
+				// required
+				httpEndpoint: 'https://creative-support-hasura.herokuapp.com/v1/graphql',
+			},
+		},
 	},
 };

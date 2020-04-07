@@ -3,7 +3,7 @@
 		<div class="card-content">
 			<div class="worker-card__title">
 				<span class="worker-card__name">{{ worker.name }},</span>
-				<span class="worker-card__position">{{ worker.position }}</span>
+				<span class="worker-card__worker-title">{{ worker.title }}</span>
 			</div>
 
 			<div class="worker-card__links">

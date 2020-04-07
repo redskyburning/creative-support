@@ -1,7 +1,9 @@
-export const mockWorker = {
+import { Worker } from '~/types';
+
+export const mockWorker: Worker = {
 	id: 1,
 	name: 'Testy McGee',
-	position: 'Director',
+	title: 'Director',
 	instagramUrl: '#foo',
 	facebookUrl: '#bar',
 	websiteUrl: '#fiz',

@@ -242,6 +242,12 @@ export default Vue.extend({
 			this.toggleActive = false;
 		},
 	},
+	mounted(): void {
+		this.$store.dispatch('init')
+			.catch((error) => {
+				console.error(error);
+			});
+	},
 	methods: {
 		handleToggle() {
 			this.toggleActive = !this.toggleActive;
