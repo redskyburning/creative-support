@@ -5,6 +5,7 @@
 				<b-checkbox
 					type="is-yella"
 					size="is-medium"
+					v-model="isAll"
 				>
 					View All
 				</b-checkbox>
@@ -13,15 +14,16 @@
 			<hr>
 
 			<div
-				v-for="category in $store.state.categories"
-				:key="category.id"
+				v-for="selection in selections"
+				:key="selection.category.id"
 				class="field"
 			>
 				<b-checkbox
+					v-model="selection.isSelected"
 					type="is-yella"
 					size="is-medium"
 				>
-					{{ category.name }}
+					{{ selection.category.name }}
 				</b-checkbox>
 			</div>
 		</div>
@@ -80,13 +82,27 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { Category, CategorySelection } from '~/types';
 
 export default Vue.extend({
 	name: 'WorkerFilter',
-	data() {
-		return {
-			selectedIds: [],
-		};
+	computed: {
+		selections(): CategorySelection[] {
+			return this.$store.state.categories.map((category: Category) => {
+				return {
+					category,
+					isSelected: false,
+				};
+			});
+		},
+		selectedIds(): number[] {
+			return this.selections
+				.filter(s => s.isSelected)
+				.map(s => s.category.id);
+		},
+		isAll(): boolean {
+			return this.selectedIds.length < 1;
+		},
 	},
 });
 </script>
