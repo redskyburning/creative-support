@@ -9,7 +9,12 @@
 			<div class="profiles__main">
 				<mega-shuffle class="profiles__mega-shuffle" />
 				<mobile-card-controls class="profiles__mobile-ui" />
-				<worker-card />
+				<client-only>
+					<worker-card
+						v-if="$store.state.selectedWorker"
+						:worker="$store.state.selectedWorker"
+					/>
+				</client-only>
 			</div>
 			<div class="profiles__extras">
 				<worker-filter class="profiles__filters" />
@@ -74,6 +79,7 @@
 
 <script>
 import Vue from 'vue';
+
 import WorkerCard from '@/components/WorkerCard.vue';
 import MobileCardControls from '~/components/MobileCardControls.vue';
 import WorkerFilter from '~/components/WorkerFilter.vue';
@@ -86,6 +92,12 @@ export default Vue.extend({
 		MobileCardControls,
 		WorkerFilter,
 		MegaShuffle,
+	},
+	mounted() {
+		this.$store.dispatch('loadWorkers')
+			.catch((error) => {
+				console.error(error);
+			});
 	},
 });
 </script>

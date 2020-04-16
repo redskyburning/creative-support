@@ -2,7 +2,7 @@
 	<div class="worker-card card">
 		<div class="card-content">
 			<div class="worker-card__title">
-				<span class="worker-card__name">{{ worker.name }},</span>
+				<span class="worker-card__name">{{ worker.firstName }} {{ worker.lastName }},</span>
 				<span class="worker-card__worker-title">{{ worker.title }}</span>
 			</div>
 
@@ -190,15 +190,16 @@
 	}
 </style>
 
-<script>
-import { mockWorker } from '../mocks';
+<script lang="ts">
+import Vue from 'vue';
 
-export default {
+export default Vue.extend({
 	name: 'WorkerCard',
-	data() {
-		return {
-			worker: mockWorker,
-		};
+	props: {
+		worker: {
+			required: true,
+			type: Object,
+		},
 	},
-};
+});
 </script>

@@ -7,7 +7,8 @@ export interface RootState {
 
 export interface Worker {
 	id: number;
-	name: string;
+	firstName: string;
+	lastName: string;
 	title: string;
 	location: string;
 	description: string;
@@ -33,5 +34,11 @@ export interface CategorySelection {
 export interface CategoryResult {
 	data: {
 		category: Category[];
+	}
+}
+
+export interface WorkersResult {
+	data: {
+		worker: Worker[];
 	}
 }
