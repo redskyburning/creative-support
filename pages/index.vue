@@ -25,7 +25,23 @@
 					/>
 				</client-only>
 			</div>
-			<div class="profiles__extras">
+			<div
+				class="profiles__extras"
+				:class="{ 'is-active' : filtersActive}"
+			>
+				<div class="profiles-filter-header">
+					<div class="profiles-filter-header__title title">Filter</div>
+					<div class="profiles-filter-header__close">
+						<b-button
+							type="is-dark"
+							inverted
+							@click="handleFilterToggle(false)"
+						>
+							<b-icon icon="close" />
+						</b-button>
+					</div>
+
+				</div>
 				<worker-filter
 					class="profiles__filters"
 					@change="handleFilterChange"

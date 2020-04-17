@@ -13,7 +13,6 @@
 
 	&__extras {
 		flex:1 1 auto;
-		margin-left:$gap;
 	}
 
 	&__main {
@@ -38,6 +37,19 @@
 		flex:1 1 auto;
 	}
 
+	&-filter-header {
+		display:flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		padding:0 $section-padding-horizontal;
+		height:$navbar-height;
+
+		.title {
+			margin-bottom:0;
+		}
+	}
+
 	&__filters {
 		height:100%;
 	}
@@ -48,15 +60,27 @@
 			width:100%;
 		}
 
-		.mega-shuffle,
-		&__extras {
+		.mega-shuffle {
 			display:none;
+		}
+
+		&__extras {
+			@include drawer;
+			top:0;
 		}
 	}
 
 	@include from($desktop) {
 		&__body {
 			margin-top:$section-padding-vertical;
+		}
+
+		&__extras {
+			margin-left:$gap;
+		}
+
+		&-filter-header {
+			display:none;
 		}
 
 		&__main {

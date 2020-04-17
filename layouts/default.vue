@@ -75,12 +75,10 @@
 			</b-navbar-item>
 		</nav>
 
-		<transition name="app__drawer">
-			<mobile-drawer
-				v-if="toggleActive"
-				class="app__drawer"
-			/>
-		</transition>
+		<mobile-drawer
+			class="app__drawer"
+			:class="{ 'is-active' : toggleActive}"
+		/>
 	</div>
 </template>
 
@@ -179,20 +177,7 @@
 		}
 
 		&__drawer {
-			$duration:.25s;
-			background:$white;
-			position:fixed;
-			top:$navbar-height;
-			bottom:0;
-			left:0;
-			width:100%;
-			z-index: $navbar-fixed-z;
-			transition:left ease-in-out $duration;
-
-			&-leave-to,
-			&-enter {
-				left:-120%;
-			}
+			@include drawer;
 		}
 
 		&__footer {
