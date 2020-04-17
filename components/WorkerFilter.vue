@@ -3,9 +3,10 @@
 		<div class="worker-filter__filters section">
 			<div class="field">
 				<b-checkbox
+					v-model="isAll"
 					type="is-yella"
 					size="is-medium"
-					v-model="isAll"
+					@input="handleAll"
 				>
 					View All
 				</b-checkbox>
@@ -22,6 +23,7 @@
 					v-model="selection.isSelected"
 					type="is-yella"
 					size="is-medium"
+					@input="handleChange(selection.category.id)"
 				>
 					{{ selection.category.name }}
 				</b-checkbox>
@@ -86,22 +88,40 @@ import { Category, CategorySelection } from '~/types';
 
 export default Vue.extend({
 	name: 'WorkerFilter',
+	data() {
+		return {
+			isAll: true,
+			ids: [] as number[],
+		};
+	},
 	computed: {
 		selections(): CategorySelection[] {
 			return this.$store.state.categories.map((category: Category) => {
 				return {
 					category,
-					isSelected: false,
+					isSelected: this.ids.includes(category.id),
 				};
 			});
 		},
-		selectedIds(): number[] {
-			return this.selections
-				.filter(s => s.isSelected)
-				.map(s => s.category.id);
+	},
+	methods: {
+		handleAll() {
+			if (this.isAll) {
+				this.ids = [];
+			}
+
+			this.$emit('change', [...this.ids]);
 		},
-		isAll(): boolean {
-			return this.selectedIds.length < 1;
+		handleChange(id: number) {
+			if (this.ids.includes(id)) {
+				this.ids = this.ids.filter(testId => id !== testId);
+			} else {
+				this.ids.push(id);
+			}
+
+			this.isAll = this.ids.length === 0;
+
+			this.$emit('change', [...this.ids]);
 		},
 	},
 });

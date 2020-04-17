@@ -2,7 +2,8 @@ import { Worker } from '~/types';
 
 export const mockWorker: Worker = {
 	id: 1,
-	name: 'Testy McGee',
+	firstName: 'Testy',
+	lastName: 'McGee',
 	title: 'Director',
 	instagramUrl: '#foo',
 	facebookUrl: '#bar',

@@ -9,6 +9,8 @@ import { Category, CategoryResult, RootState, Worker, WorkersResult } from '~/ty
 import getCategories from '~/gql/getCategories.query.gql';
 // @ts-ignore
 import getWorkers from '~/gql/getWorkers.query.gql';
+// @ts-ignore
+import getFilteredWorkers from '~/gql/getFilteredWorkers.query.gql';
 
 export const state = (): RootState => ({
 	workers: [],
@@ -33,12 +35,12 @@ export const mutations: MutationTree<RootState> = {
 };
 
 export const actions: ActionTree<RootState, RootState> = {
-	loadWorkers(store: ActionContext<RootState, RootState>): Promise<void> {
+	loadWorkers(store: ActionContext<RootState, RootState>, categoryIds: number[] = []): Promise<void> {
 		return new Promise((resolve, reject) => {
 			this.app.apolloProvider.defaultClient.query({
-				query: getWorkers,
+				query: categoryIds.length > 0 ? getFilteredWorkers : getWorkers,
 				variables: {
-					categoryIds: [1],
+					categoryIds,
 				},
 			})
 				.then((result: WorkersResult) => {

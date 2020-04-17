@@ -1,5 +1,5 @@
 query getWorkers($categoryIds: [Int!]) {
-	worker(limit: 50, order_by: {id: asc}) {
+	worker(limit: 50, order_by: {id: asc}, where: {worker_categories: {category_id: {_in: $categoryIds}}}) {
 		id
 		firstName : first_name
 		lastName : last_name

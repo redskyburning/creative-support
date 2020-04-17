@@ -17,7 +17,10 @@
 				</client-only>
 			</div>
 			<div class="profiles__extras">
-				<worker-filter class="profiles__filters" />
+				<worker-filter
+					class="profiles__filters"
+					@change="handleFilterChange"
+				/>
 			</div>
 		</div>
 	</section>
@@ -77,7 +80,7 @@
 	}
 </style>
 
-<script>
+<script lang="ts">
 import Vue from 'vue';
 
 import WorkerCard from '@/components/WorkerCard.vue';
@@ -98,6 +101,15 @@ export default Vue.extend({
 			.catch((error) => {
 				console.error(error);
 			});
+	},
+	methods: {
+		handleFilterChange(categoryIds: number[]) {
+			console.warn('???', categoryIds);
+			this.$store.dispatch('loadWorkers', categoryIds)
+				.catch((error) => {
+					console.error(error);
+				});
+		},
 	},
 });
 </script>
