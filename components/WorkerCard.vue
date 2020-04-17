@@ -45,7 +45,10 @@
 				</a>
 			</div>
 
-			<div class="worker-card__description content" v-html="worker.description" />
+			<div
+				class="worker-card__description content"
+				v-html="worker.description"
+			/>
 
 			<div class="worker-card__donations-buttons buttons">
 				<b-button
@@ -108,6 +111,9 @@
 	.worker-card {
 		position: relative;
 		margin-bottom:10px;
+		display:flex;
+		flex-direction: column;
+		align-items: stretch;
 
 		&::before,
 		&::after {
@@ -132,6 +138,12 @@
 			width:$width;
 			bottom:-12px;
 			left:(100% - $width) / 2;
+		}
+
+		.card-content {
+			flex:1 1 auto;
+			display:flex;
+			flex-direction: column;
 		}
 
 		.card-content > * + * {
@@ -169,6 +181,10 @@
 				text-align:right;
 				padding-left:$gap / 2;
 			}
+		}
+
+		&__description {
+			flex:1 1 auto;
 		}
 
 		&__footer {

@@ -11,6 +11,7 @@
 				<mobile-card-controls class="profiles__mobile-ui" />
 				<client-only>
 					<worker-card
+						class="profiles__worker-card"
 						v-if="$store.state.selectedWorker"
 						:worker="$store.state.selectedWorker"
 					/>
