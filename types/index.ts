@@ -4,6 +4,8 @@ export interface RootState {
 	isLoading: boolean;
 	categories: Category[];
 	seed: number;
+	user: AppUser | null;
+	token: any;
 }
 
 export interface Worker {
@@ -42,4 +44,12 @@ export interface WorkersResult {
 	data: {
 		worker: Worker[];
 	}
+}
+
+export interface AppUser {
+	uid: string;
+	displayName: string;
+	photoURL: string;
+	email: string;
+	emailVerified: boolean;
 }

@@ -5,14 +5,17 @@ import {
 	GetterTree,
 } from 'vuex';
 
-import { Category, CategoryResult, RootState, Worker, WorkersResult } from '~/types';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
+
+import { AppUser, Category, CategoryResult, RootState, Worker, WorkersResult } from '~/types';
 // @ts-ignore
 import getCategories from '~/gql/getCategories.query.gql';
 // @ts-ignore
 import getWorkers from '~/gql/getWorkers.query.gql';
 // @ts-ignore
 import getFilteredWorkers from '~/gql/getFilteredWorkers.query.gql';
-import { RuleSetQuery } from 'webpack';
 
 export const state = (): RootState => ({
 	workers: [],
@@ -20,6 +23,8 @@ export const state = (): RootState => ({
 	isLoading: true,
 	categories: [],
 	seed: 0,
+	user: null,
+	token: null,
 });
 
 export const mutations: MutationTree<RootState> = {
@@ -38,6 +43,12 @@ export const mutations: MutationTree<RootState> = {
 	setSeed(state: RootState, seed: number): void {
 		state.seed = seed;
 	},
+	setUser(state: RootState, user: any): void {
+		state.user = user;
+	},
+	setToken(state: RootState, token: any): void {
+		state.token = token;
+	},
 };
 
 export const getters: GetterTree<RootState, RootState> = {
@@ -51,6 +62,52 @@ export const getters: GetterTree<RootState, RootState> = {
 };
 
 export const actions: ActionTree<RootState, RootState> = {
+	initAuth(store: ActionContext<RootState, RootState>): Promise<void> {
+		return new Promise((resolve) => {
+			// Find these options in your Firebase console
+			firebase.initializeApp({
+				apiKey: 'AIzaSyAq0Qum9t0kVQNT47ZMJretsY0l7L_j0ZI',
+				authDomain: 'creative-support-f274f.firebaseapp.com',
+				projectId: 'creative-support-f274f',
+			});
+
+			firebase.auth().onAuthStateChanged(async(user) => {
+				if (user) {
+					const appUser: AppUser = {
+						uid: user.uid,
+						displayName: user.displayName || '',
+						email: user.email || '',
+						emailVerified: user.emailVerified,
+						photoURL: user.photoURL || '',
+					};
+					store.commit('setUser', appUser);
+
+					const token = await user.getIdToken();
+					store.commit('setToken', token);
+
+					resolve();
+				} else {
+					store.commit('setUser', null);
+					store.commit('setToken', null);
+
+					resolve();
+				}
+			});
+		});
+	},
+	auth(): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const provider = new firebase.auth.GoogleAuthProvider();
+			firebase.auth().signInWithPopup(provider)
+				.then(() => {
+					resolve();
+				})
+				.catch(reject);
+		});
+	},
+	logout(): Promise<void> {
+		return firebase.auth().signOut();
+	},
 	shuffle(store: ActionContext<RootState, RootState>): Promise<void> {
 		return new Promise((resolve) => {
 			store.commit('setSeed', Math.random());
@@ -60,7 +117,7 @@ export const actions: ActionTree<RootState, RootState> = {
 	loadWorkers(store: ActionContext<RootState, RootState>, categoryIds: number[] = []): Promise<void> {
 		return new Promise((resolve, reject) => {
 			const hasCats = categoryIds.length > 0;
-			const query: RuleSetQuery = {
+			const query:any = {
 				query: hasCats ? getFilteredWorkers : getWorkers,
 			};
 
@@ -92,7 +149,10 @@ export const actions: ActionTree<RootState, RootState> = {
 	},
 	init(store: ActionContext<RootState, RootState>): Promise<void> {
 		return new Promise((resolve, reject) => {
-			store.dispatch('loadCategories')
+			Promise.all([
+				store.dispatch('initAuth'),
+				store.dispatch('loadCategories'),
+			])
 				.then(() => {
 					resolve();
 				})
