@@ -1,0 +1,34 @@
+mutation addWorker(
+	$firstName: String!,
+	$lastName: String!,
+	$title: String!,
+	$instagramUrl: String,
+	$facebookUrl: String,
+	$websiteUrl: String,
+	$otherUrl: String,
+	$description: String!,
+	$patreonUrl: String,
+	$paypalUrl: String,
+	$venmoUrl: String,
+	$userId: String!,
+	$location: String!
+) {
+	insert_worker(objects: {
+		description: $description,
+		facebook_url: $facebookUrl,
+		first_name: $firstName,
+		instagram_url: $instagramUrl,
+		last_name: $lastName,
+		location: $location,
+		other_url: $otherUrl,
+		patreon_url: $patreonUrl,
+		paypal_url: $paypalUrl,
+		title: $title,
+		userId: $userId,
+		venmo_url: $venmoUrl
+	}) {
+		returning {
+			id
+		}
+	}
+}

@@ -24,7 +24,9 @@
 		<b-navbar-item>
 			Profile
 		</b-navbar-item>
-		<b-navbar-item>
+		<b-navbar-item
+			@click="handleLogout"
+		>
 			Logout
 		</b-navbar-item>
 	</b-navbar-dropdown>
@@ -34,6 +36,7 @@
 .user-dropdown {
 	&__profile-image {
 		width:40px;
+		margin:-6px 0;
 
 		img {
 			&.is-rounded {

@@ -9,7 +9,7 @@ export interface RootState {
 }
 
 export interface Worker {
-	id: number;
+	id?: number;
 	firstName: string;
 	lastName: string;
 	title: string;

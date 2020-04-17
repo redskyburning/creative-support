@@ -9,4 +9,9 @@ export default Vue.extend({
 			required: true,
 		} as PropOptions<AppUser>,
 	},
+	methods: {
+		handleLogout() {
+			this.$store.dispatch('logout');
+		},
+	},
 });

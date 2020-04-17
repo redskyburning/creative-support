@@ -13,5 +13,20 @@ export const mockWorker: Worker = {
 	patreonUrl: '#foo',
 	paypalUrl: '#bar',
 	venmoUrl: '#fiz',
-  location: 'Chamblee',
+	location: 'Chamblee',
+};
+
+export const blankWorker: Worker = {
+	firstName: '',
+	lastName: '',
+	title: '',
+	instagramUrl: '',
+	facebookUrl: '',
+	websiteUrl: '',
+	otherUrl: '',
+	description: '',
+	patreonUrl: '',
+	paypalUrl: '',
+	venmoUrl: '',
+	location: '',
 };
