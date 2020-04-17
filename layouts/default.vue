@@ -86,6 +86,10 @@
 
 <style lang="scss">
   .app {
+		display:flex;
+		flex-direction:column;
+		min-height:100vh;
+
     &-nav {
       display:flex;
       flex-direction: row;
@@ -163,6 +167,16 @@
 			&__made {
 			}
     }
+
+		&__body {
+			flex:1 1 auto;
+			display:flex;
+			flex-direction:column;
+
+			> * {
+				flex:1 1 auto;
+			}
+		}
 
 		&__drawer {
 			$duration:.25s;
