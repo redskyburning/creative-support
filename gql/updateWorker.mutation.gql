@@ -1,4 +1,5 @@
-mutation addWorker(
+mutation updateWorker(
+	$id: String!,
 	$firstName: String!,
 	$lastName: String!,
 	$title: String!,
@@ -14,6 +15,7 @@ mutation addWorker(
 	$location: String!
 ) {
 	insert_worker(objects: {
+		id: $id
 		description: $description,
 		facebook_url: $facebookUrl,
 		first_name: $firstName,

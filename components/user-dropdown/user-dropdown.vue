@@ -21,7 +21,10 @@
 			</div>
 		</div>
 		<hr class="dropdown-divider">
-		<b-navbar-item>
+		<b-navbar-item
+			tag="nuxt-link"
+			to="/profile"
+		>
 			Profile
 		</b-navbar-item>
 		<b-navbar-item

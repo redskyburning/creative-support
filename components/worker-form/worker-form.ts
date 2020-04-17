@@ -1,6 +1,4 @@
 import Vue, { PropOptions } from 'vue';
-// @ts-ignore
-import AddWorker from '~/gql/addWorker.mutation.gql';
 
 export default Vue.extend({
 	name: 'WorkerForm',

@@ -36,3 +36,10 @@
 	font-size:$size-5;
 	letter-spacing: .04em;
 }
+
+.field {
+
+	&:not(:last-child) {
+		margin-bottom:1.5rem;
+	}
+}

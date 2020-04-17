@@ -10,6 +10,7 @@ query getWorkers($categoryIds: [Int!]) {
 		otherUrl : other_url
 		patreonUrl : patreon_url
 		paypalUrl : paypal_url
+		websiteUrl: website_url
 		title
 		venmoUrl : venmo_url
 	}
