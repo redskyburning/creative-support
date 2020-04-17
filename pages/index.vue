@@ -30,7 +30,9 @@
 				:class="{ 'is-active' : filtersActive}"
 			>
 				<div class="profiles-filter-header">
-					<div class="profiles-filter-header__title title">Filter</div>
+					<div class="profiles-filter-header__title title">
+						Filter
+					</div>
 					<div class="profiles-filter-header__close">
 						<b-button
 							type="is-dark"
@@ -40,7 +42,6 @@
 							<b-icon icon="close" />
 						</b-button>
 					</div>
-
 				</div>
 				<worker-filter
 					class="profiles__filters"
