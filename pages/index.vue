@@ -7,7 +7,10 @@
 		</div>
 		<div class="page__body profiles__body">
 			<div class="profiles__main">
-				<mega-shuffle class="profiles__mega-shuffle" />
+				<mega-shuffle
+					class="profiles__mega-shuffle"
+					@shuffle="handleShuffle"
+				/>
 				<mobile-card-controls
 					class="profiles__mobile-ui"
 					:filter-active="filtersActive"

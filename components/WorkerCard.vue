@@ -203,6 +203,12 @@
 				margin-left:.2rem;
 			}
 		}
+
+		@include from($desktop) {
+			&__description {
+
+			}
+		}
 	}
 </style>
 

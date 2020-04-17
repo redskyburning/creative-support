@@ -72,7 +72,6 @@ export const actions: ActionTree<RootState, RootState> = {
 				.then((result: WorkersResult) => {
 					store.commit('setWorkers', result.data.worker);
 					store.commit('setSelectedWorker', result.data.worker[0] || null);
-					store.dispatch('shuffle');
 
 					resolve();
 				})
