@@ -1,0 +1,16 @@
+query getWorkers($categoryIds: [Int!]) {
+	worker(limit: 50, order_by: {id: asc}, where: {worker_categories: {category_id: {_in: $categoryIds}}}) {
+		id
+		firstName : first_name
+		lastName : last_name
+		description
+		facebookUrl : facebook_url
+		instagramUrl : instagram_url
+		location
+		otherUrl : other_url
+		patreonUrl : patreon_url
+		paypalUrl : paypal_url
+		title
+		venmoUrl : venmo_url
+	}
+}

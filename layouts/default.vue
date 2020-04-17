@@ -75,17 +75,19 @@
 			</b-navbar-item>
 		</nav>
 
-		<transition name="app__drawer">
-			<mobile-drawer
-				v-if="toggleActive"
-				class="app__drawer"
-			/>
-		</transition>
+		<mobile-drawer
+			class="app__drawer"
+			:class="{ 'is-active' : toggleActive}"
+		/>
 	</div>
 </template>
 
 <style lang="scss">
   .app {
+		display:flex;
+		flex-direction:column;
+		min-height:100vh;
+
     &-nav {
       display:flex;
       flex-direction: row;
@@ -164,21 +166,18 @@
 			}
     }
 
-		&__drawer {
-			$duration:.25s;
-			background:$white;
-			position:fixed;
-			top:$navbar-height;
-			bottom:0;
-			left:0;
-			width:100%;
-			z-index: $navbar-fixed-z;
-			transition:left ease-in-out $duration;
+		&__body {
+			flex:1 1 auto;
+			display:flex;
+			flex-direction:column;
 
-			&-leave-to,
-			&-enter {
-				left:-120%;
+			> * {
+				flex:1 1 auto;
 			}
+		}
+
+		&__drawer {
+			@include drawer;
 		}
 
 		&__footer {
@@ -241,6 +240,12 @@ export default Vue.extend({
 		$route() {
 			this.toggleActive = false;
 		},
+	},
+	mounted(): void {
+		this.$store.dispatch('init')
+			.catch((error) => {
+				console.error(error);
+			});
 	},
 	methods: {
 		handleToggle() {

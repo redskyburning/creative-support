@@ -1,0 +1,94 @@
+.profiles {
+	display:flex;
+	flex-direction: column;
+	align-items: stretch;
+
+	&__body {
+		flex:1 1 auto;
+		margin-top:$gap;
+		display:flex;
+		flex-direction: row;
+		align-items: stretch;
+	}
+
+	&__extras {
+		flex:1 1 auto;
+	}
+
+	&__main {
+		width:400px;
+		display:flex;
+		flex-direction: column;
+		align-items: stretch;
+
+		> *:not(:last-child) {
+			margin-bottom:$gap;
+		}
+	}
+
+	&__mobile-ui {
+		position:sticky;
+		top:0;
+		z-index: $navbar-fixed-z;
+		//margin-bottom:$gap;
+	}
+
+	&__worker-card {
+		flex:1 1 auto;
+	}
+
+	&-filter-header {
+		display:flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		padding:0 $section-padding-horizontal;
+		height:$navbar-height;
+
+		.title {
+			margin-bottom:0;
+		}
+	}
+
+	&__filters {
+		height:100%;
+	}
+
+	@include until($desktop) {
+		&__main,
+		&__extras {
+			width:100%;
+		}
+
+		.mega-shuffle {
+			display:none;
+		}
+
+		&__extras {
+			@include drawer;
+			top:0;
+		}
+	}
+
+	@include from($desktop) {
+		&__body {
+			margin-top:$section-padding-vertical;
+		}
+
+		&__extras {
+			margin-left:$gap;
+		}
+
+		&-filter-header {
+			display:none;
+		}
+
+		&__main {
+			max-width:400px;
+		}
+
+		.mobile-card-controls {
+			display:none;
+		}
+	}
+}

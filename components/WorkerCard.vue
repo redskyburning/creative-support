@@ -2,8 +2,8 @@
 	<div class="worker-card card">
 		<div class="card-content">
 			<div class="worker-card__title">
-				<span class="worker-card__name">{{ worker.name }},</span>
-				<span class="worker-card__position">{{ worker.position }}</span>
+				<span class="worker-card__name">{{ worker.firstName }} {{ worker.lastName }},</span>
+				<span class="worker-card__worker-title">{{ worker.title }}</span>
 			</div>
 
 			<div class="worker-card__links">
@@ -45,7 +45,10 @@
 				</a>
 			</div>
 
-			<div class="worker-card__description content" v-html="worker.description" />
+			<div
+				class="worker-card__description content"
+				v-html="worker.description"
+			/>
 
 			<div class="worker-card__donations-buttons buttons">
 				<b-button
@@ -108,6 +111,9 @@
 	.worker-card {
 		position: relative;
 		margin-bottom:10px;
+		display:flex;
+		flex-direction: column;
+		align-items: stretch;
 
 		&::before,
 		&::after {
@@ -132,6 +138,12 @@
 			width:$width;
 			bottom:-12px;
 			left:(100% - $width) / 2;
+		}
+
+		.card-content {
+			flex:1 1 auto;
+			display:flex;
+			flex-direction: column;
 		}
 
 		.card-content > * + * {
@@ -171,6 +183,10 @@
 			}
 		}
 
+		&__description {
+			flex:1 1 auto;
+		}
+
 		&__footer {
 			display:flex;
 			flex-direction: row;
@@ -187,18 +203,25 @@
 				margin-left:.2rem;
 			}
 		}
+
+		@include from($desktop) {
+			&__description {
+
+			}
+		}
 	}
 </style>
 
-<script>
-import { mockWorker } from '../mocks';
+<script lang="ts">
+import Vue from 'vue';
 
-export default {
+export default Vue.extend({
 	name: 'WorkerCard',
-	data() {
-		return {
-			worker: mockWorker,
-		};
+	props: {
+		worker: {
+			required: true,
+			type: Object,
+		},
 	},
-};
+});
 </script>

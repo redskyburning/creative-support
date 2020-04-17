@@ -6,6 +6,7 @@
 				class="mega-shuffle__button is-chunky-serif"
 				size="is-medium"
 				outlined
+				@click="handleClick"
 			>
 				Shuffle
 			</b-button>
@@ -35,5 +36,10 @@ import Vue from 'vue';
 
 export default Vue.extend({
 	name: 'MegaShuffle',
+	methods: {
+		handleClick() {
+			this.$emit('shuffle');
+		},
+	},
 });
 </script>

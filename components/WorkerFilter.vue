@@ -3,8 +3,10 @@
 		<div class="worker-filter__filters section">
 			<div class="field">
 				<b-checkbox
+					v-model="isAll"
 					type="is-yella"
 					size="is-medium"
+					@input="handleAll"
 				>
 					View All
 				</b-checkbox>
@@ -12,30 +14,18 @@
 
 			<hr>
 
-			<div class="field">
+			<div
+				v-for="selection in selections"
+				:key="selection.category.id"
+				class="field"
+			>
 				<b-checkbox
+					v-model="selection.isSelected"
 					type="is-yella"
 					size="is-medium"
+					@input="handleChange(selection.category.id)"
 				>
-					Art
-				</b-checkbox>
-			</div>
-
-			<div class="field">
-				<b-checkbox
-					type="is-yella"
-					size="is-medium"
-				>
-					Creative Writing
-				</b-checkbox>
-			</div>
-
-			<div class="field">
-				<b-checkbox
-					type="is-yella"
-					size="is-medium"
-				>
-					Dance & Theater
+					{{ selection.category.name }}
 				</b-checkbox>
 			</div>
 		</div>
@@ -81,13 +71,58 @@
 		hr {
 			background-color:$grey-lighter;
 		}
+
+		.field {
+			display:block;
+		}
+
+		.field + .field {
+
+		}
 	}
 </style>
 
 <script lang="ts">
 import Vue from 'vue';
+import { Category, CategorySelection } from '~/types';
 
 export default Vue.extend({
 	name: 'WorkerFilter',
+	data() {
+		return {
+			isAll: true,
+			ids: [] as number[],
+		};
+	},
+	computed: {
+		selections(): CategorySelection[] {
+			return this.$store.state.categories.map((category: Category) => {
+				return {
+					category,
+					isSelected: this.ids.includes(category.id),
+				};
+			});
+		},
+	},
+	methods: {
+		handleAll() {
+			if (this.isAll) {
+				this.ids = [];
+			}
+
+			this.$emit('change', [...this.ids]);
+		},
+		handleChange(id: number) {
+			if (this.ids.includes(id)) {
+				this.ids = this.ids.filter(testId => id !== testId);
+			} else {
+				this.ids.push(id);
+			}
+
+			this.isAll = this.ids.length === 0;
+
+			this.$emit('change', [...this.ids]);
+		},
+	},
 });
 </script>

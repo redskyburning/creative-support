@@ -1,6 +1,6 @@
 <template>
 	<div class="made-with">
-		<span>Made w/</span> <img src="~/assets/heart.svg" /> <span>in ATL</span>
+		<span>Made w/</span> <img src="~/assets/heart.svg"> <span>in ATL</span>
 	</div>
 </template>
 

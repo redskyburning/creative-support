@@ -11,7 +11,6 @@
 			<p>Consider that these experiences were made by someone that works in a creative field. Artists, videographers, photographers, musicians, dancers, designers, and others — right now, these family, friends, and neighbors in metro-Atlanta’s creative industries are severely impacted by social distancing and quarantine. Events have been canceled, productions are suspended, clients are backing out. Many are contract and freelance workers who rely on the flexibility of gig and service industry work to enable their creative careers.</p>
 
 			<p>With these industries on hold, many have seen their incomes crater. As we enjoy the fruits of their labor, consider sending a little support through Patreon, Venmo or Cash App.  It’s tough on everyone, and every little bit helps. (Plus, it will feel great to help someone out.) Start now!</p>
-
 		</div>
 	</section>
 </template>
