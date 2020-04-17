@@ -2,6 +2,7 @@ import {
 	MutationTree,
 	ActionTree,
 	ActionContext,
+	GetterTree,
 } from 'vuex';
 
 import { Category, CategoryResult, RootState, Worker, WorkersResult } from '~/types';
@@ -11,12 +12,14 @@ import getCategories from '~/gql/getCategories.query.gql';
 import getWorkers from '~/gql/getWorkers.query.gql';
 // @ts-ignore
 import getFilteredWorkers from '~/gql/getFilteredWorkers.query.gql';
+import { RuleSetQuery } from 'webpack';
 
 export const state = (): RootState => ({
 	workers: [],
 	selectedWorker: null,
 	isLoading: true,
 	categories: [],
+	seed: 0,
 });
 
 export const mutations: MutationTree<RootState> = {
@@ -32,20 +35,45 @@ export const mutations: MutationTree<RootState> = {
 	setCategories(state: RootState, categories: Category[]): void {
 		state.categories = categories;
 	},
+	setSeed(state: RootState, seed: number): void {
+		state.seed = seed;
+	},
+};
+
+export const getters: GetterTree<RootState, RootState> = {
+	activeWorker: (state: RootState) => {
+		if (state.workers.length > 0) {
+			return state.workers[Math.floor(state.workers.length * state.seed)];
+		} else {
+			return null;
+		}
+	},
 };
 
 export const actions: ActionTree<RootState, RootState> = {
+	shuffle(store: ActionContext<RootState, RootState>): Promise<void> {
+		return new Promise((resolve) => {
+			store.commit('setSeed', Math.random());
+			resolve();
+		});
+	},
 	loadWorkers(store: ActionContext<RootState, RootState>, categoryIds: number[] = []): Promise<void> {
 		return new Promise((resolve, reject) => {
-			this.app.apolloProvider.defaultClient.query({
-				query: categoryIds.length > 0 ? getFilteredWorkers : getWorkers,
-				variables: {
-					categoryIds,
-				},
-			})
+			const hasCats = categoryIds.length > 0;
+			const query: RuleSetQuery = {
+				query: hasCats ? getFilteredWorkers : getWorkers,
+			};
+
+			if (hasCats) {
+				query.variables = { categoryIds };
+			}
+
+			this.app.apolloProvider.defaultClient.query(query)
 				.then((result: WorkersResult) => {
 					store.commit('setWorkers', result.data.worker);
 					store.commit('setSelectedWorker', result.data.worker[0] || null);
+					store.dispatch('shuffle');
+
 					resolve();
 				})
 				.catch(reject);

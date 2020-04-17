@@ -1,8 +1,8 @@
 import Vue from 'vue';
 
+import WorkerFilter from '../components/WorkerFilter.vue';
 import WorkerCard from '@/components/WorkerCard.vue';
 import MobileCardControls from '~/components/MobileCardControls.vue';
-import WorkerFilter from '../components/WorkerFilter.vue';
 import MegaShuffle from '~/components/MegaShuffle.vue';
 
 export default Vue.extend({
@@ -13,6 +13,11 @@ export default Vue.extend({
 		WorkerFilter,
 		MegaShuffle,
 	},
+	data() {
+		return {
+			filtersActive: false,
+		};
+	},
 	mounted() {
 		this.$store.dispatch('loadWorkers')
 			.catch((error) => {
@@ -20,8 +25,16 @@ export default Vue.extend({
 			});
 	},
 	methods: {
+		handleShuffle() {
+			this.$store.dispatch('shuffle')
+				.catch((error) => {
+					console.error(error);
+				});
+		},
+		handleFilterToggle(isActive: boolean) {
+			this.filtersActive = isActive;
+		},
 		handleFilterChange(categoryIds: number[]) {
-			console.warn('???', categoryIds);
 			this.$store.dispatch('loadWorkers', categoryIds)
 				.catch((error) => {
 					console.error(error);

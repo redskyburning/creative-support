@@ -8,12 +8,17 @@
 		<div class="page__body profiles__body">
 			<div class="profiles__main">
 				<mega-shuffle class="profiles__mega-shuffle" />
-				<mobile-card-controls class="profiles__mobile-ui" />
+				<mobile-card-controls
+					class="profiles__mobile-ui"
+					:filter-active="filtersActive"
+					@filter="handleFilterToggle"
+					@shuffle="handleShuffle"
+				/>
 				<client-only>
 					<worker-card
+						v-if="$store.getters.activeWorker"
 						class="profiles__worker-card"
-						v-if="$store.state.selectedWorker"
-						:worker="$store.state.selectedWorker"
+						:worker="$store.getters.activeWorker"
 					/>
 				</client-only>
 			</div>

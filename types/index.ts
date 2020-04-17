@@ -3,6 +3,7 @@ export interface RootState {
 	selectedWorker: Worker | null;
 	isLoading: boolean;
 	categories: Category[];
+	seed: number;
 }
 
 export interface Worker {
