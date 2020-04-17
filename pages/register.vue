@@ -6,76 +6,10 @@
 			</h1>
 		</div>
 		<div class="page__body content">
-			<form>
-				<b-field label="First Name">
-					<b-input
-						v-model="worker.firstName"
-					/>
-				</b-field>
-				<b-field label="Last Name">
-					<b-input
-						v-model="worker.lastName"
-					/>
-				</b-field>
-				<b-field label="Title">
-					<b-input
-						v-model="worker.title"
-					/>
-				</b-field>
-				<b-field label="Location">
-					<b-input
-						v-model="worker.location"
-					/>
-				</b-field>
-				<b-field label="Description">
-					<b-input
-						v-model="worker.description"
-						type="textarea"
-					/>
-				</b-field>
-				<b-field label="Instagram Url">
-					<b-input
-						v-model="worker.instagramUrl"
-					/>
-				</b-field>
-				<b-field label="Facebook Url">
-					<b-input
-						v-model="worker.facebookUrl"
-					/>
-				</b-field>
-				<b-field label="Website Url">
-					<b-input
-						v-model="worker.websiteUrl"
-					/>
-				</b-field>
-				<b-field label="Other Url">
-					<b-input
-						v-model="worker.otherUrl"
-					/>
-				</b-field>
-				<b-field label="Patreon Url">
-					<b-input
-						v-model="worker.patreonUrl"
-					/>
-				</b-field>
-				<b-field label="Paypal Url">
-					<b-input
-						v-model="worker.paypalUrl"
-					/>
-				</b-field>
-				<b-field label="Venmo Url">
-					<b-input
-						v-model="worker.venmoUrl"
-					/>
-				</b-field>
-				<div class="buttons">
-					<b-button
-						tag="input"
-						native-type="submit"
-						value="Submit"
-					/>
-				</div>
-			</form>
+			<worker-form
+				:worker="worker"
+				@submit="handleSubmit"
+			/>
 		</div>
 	</section>
 </template>
@@ -87,16 +21,48 @@
 
 <script lang="ts">
 import Vue from 'vue';
+
+import { Worker } from '~/types';
 import { blankWorker } from '~/mocks';
+import WorkerForm from '~/components/worker-form/worker-form.vue';
+import AddWorker from '~/gql/addWorker.mutation.gql';
 
 export default Vue.extend({
 	name: 'Register',
+	components: {
+		WorkerForm,
+	},
 	data() {
 		return {
 			worker: {
 				...blankWorker,
 			},
 		};
+	},
+	methods: {
+		handleSubmit(worker:Worker) {
+			// @ts-ignore
+			this.$apollo.mutate({
+				mutation: AddWorker,
+				variables: {
+					...worker,
+					userId: this.$store.state.user.uid,
+				},
+			})
+				.then(() => {
+					this.$buefy.toast.open({
+						type: 'is-success',
+						message: 'Registered!',
+					});
+				})
+				.catch((error: Error) => {
+					console.error(error);
+					this.$buefy.toast.open({
+						type: 'is-danger',
+						message: error.message,
+					});
+				});
+		},
 	},
 });
 </script>
