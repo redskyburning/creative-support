@@ -24,7 +24,6 @@
 import Vue from 'vue';
 
 import { Worker } from '~/types';
-import { blankWorker } from '~/mocks';
 import WorkerForm from '~/components/worker-form/worker-form.vue';
 // @ts-ignore
 import UpdateWorker from '~/gql/updateWorker.mutation.gql';
@@ -44,18 +43,11 @@ export default Vue.extend({
 	middleware: 'profile',
 	methods: {
 		handleSubmit(worker:Worker) {
-			// @ts-ignore
-			this.$apollo.mutate({
-				mutation: UpdateWorker,
-				variables: {
-					...worker,
-					userId: this.$store.state.user.uid,
-				},
-			})
+			this.$store.dispatch('updateProfile', worker)
 				.then(() => {
 					this.$buefy.toast.open({
 						type: 'is-success',
-						message: 'Registered!',
+						message: 'Profile Updated!',
 					});
 				})
 				.catch((error: Error) => {

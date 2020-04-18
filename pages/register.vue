@@ -25,8 +25,6 @@ import Vue from 'vue';
 import { Worker } from '~/types';
 import { blankWorker } from '~/mocks';
 import WorkerForm from '~/components/worker-form/worker-form.vue';
-// @ts-ignore
-import AddWorker from '~/gql/addWorker.mutation.gql';
 
 export default Vue.extend({
 	name: 'Register',
@@ -41,27 +39,19 @@ export default Vue.extend({
 			},
 		};
 	},
-	mounted(): void {
-		if (this.$store.state.profile !== null) {
-			this.$router.push({
-				path: '/profile',
-			});
-		}
-	},
 	methods: {
 		handleSubmit(worker:Worker) {
-			// @ts-ignore
-			this.$apollo.mutate({
-				mutation: AddWorker,
-				variables: {
-					...worker,
-					userId: this.$store.state.user.uid,
-				},
+			this.$store.dispatch('addProfile', {
+				worker,
+				user: this.$store.state.user,
 			})
 				.then(() => {
 					this.$buefy.toast.open({
 						type: 'is-success',
 						message: 'Registered!',
+					});
+					this.$router.push({
+						path: '/profile',
 					});
 				})
 				.catch((error: Error) => {

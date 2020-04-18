@@ -25,11 +25,24 @@ mutation addWorker(
 		paypal_url: $paypalUrl,
 		website_url: $websiteUrl,
 		title: $title,
-		userId: $userId,
+		user_id: $userId,
 		venmo_url: $venmoUrl
 	}) {
 		returning {
 			id
+			firstName : first_name
+			lastName : last_name
+			description
+			facebookUrl : facebook_url
+			instagramUrl : instagram_url
+			location
+			otherUrl : other_url
+			patreonUrl : patreon_url
+			paypalUrl : paypal_url
+			websiteUrl: website_url
+			title
+			venmoUrl : venmo_url
+			userId: user_id
 		}
 	}
 }

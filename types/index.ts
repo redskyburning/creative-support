@@ -43,9 +43,31 @@ export interface CategoryResult {
 	}
 }
 
+export interface WorkerResponse extends Worker{
+	__typename: string;
+}
+
 export interface WorkersResult {
 	data: {
-		worker: Worker[];
+		worker: WorkerResponse[];
+	}
+}
+
+export interface AddWorkerResponse {
+	data: {
+		// eslint-disable-next-line camelcase
+		insert_worker: {
+			returning: WorkerResponse[];
+		}
+	}
+}
+
+export interface UpdateWorkerResponse {
+	data: {
+		// eslint-disable-next-line camelcase
+		update_worker: {
+			returning: WorkerResponse[];
+		}
 	}
 }
 
@@ -55,4 +77,9 @@ export interface AppUser {
 	photoURL: string;
 	email: string;
 	emailVerified: boolean;
+}
+
+export interface AddWorkerParams {
+	worker: Worker;
+	user: AppUser;
 }

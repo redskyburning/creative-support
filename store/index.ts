@@ -9,7 +9,15 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 
-import { AppUser, Category, CategoryResult, RootState, Worker, WorkersResult } from '~/types';
+import {
+	AddWorkerParams, AddWorkerResponse,
+	AppUser,
+	Category,
+	CategoryResult,
+	RootState, UpdateWorkerResponse,
+	Worker,
+	WorkersResult,
+} from '~/types';
 // @ts-ignore
 import getCategories from '~/gql/getCategories.query.gql';
 // @ts-ignore
@@ -18,6 +26,11 @@ import getWorkers from '~/gql/getWorkers.query.gql';
 import getFilteredWorkers from '~/gql/getFilteredWorkers.query.gql';
 // @ts-ignore
 import getWorkerByUserId from '~/gql/getWorkerByUserId.query.gql';
+// @ts-ignore
+import updateWorker from '~/gql/updateWorker.mutation.gql';
+// @ts-ignore
+import addWorker from '~/gql/addWorker.mutation.gql';
+import { getWorkerFromResult } from '~/store/utils';
 
 export const state = (): RootState => ({
 	workers: [],
@@ -206,10 +219,61 @@ export const actions: ActionTree<RootState, RootState> = {
 			})
 				.then((result: WorkersResult) => {
 					if (result.data.worker[0]) {
-						resolve(result.data.worker[0]);
+						resolve(getWorkerFromResult(result.data.worker[0]));
 					} else {
 						resolve(null);
 					}
+				})
+				.catch(reject);
+		});
+	},
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	addWorker(store: ActionContext<RootState, RootState>, { worker, user } : AddWorkerParams): Promise<Worker | null> {
+		return new Promise((resolve, reject) => {
+			this.app.apolloProvider.defaultClient.mutate({
+				mutation: addWorker,
+				variables: {
+					...worker,
+					userId: user.uid,
+				},
+			})
+				.then((response: AddWorkerResponse) => {
+					resolve(getWorkerFromResult(response.data.insert_worker.returning[0]));
+				})
+				.catch(reject);
+		});
+	},
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	updateWorker(store: ActionContext<RootState, RootState>, worker: Worker): Promise<Worker | null> {
+		return new Promise((resolve, reject) => {
+			this.app.apolloProvider.defaultClient.mutate({
+				mutation: updateWorker,
+				variables: {
+					...worker,
+				},
+			})
+				.then((response: UpdateWorkerResponse) => {
+					resolve(getWorkerFromResult(response.data.update_worker.returning[0]));
+				})
+				.catch(reject);
+		});
+	},
+	addProfile(store: ActionContext<RootState, RootState>, params: AddWorkerParams): Promise<Worker | null> {
+		return new Promise((resolve, reject) => {
+			store.dispatch('addWorker', params)
+				.then((worker: Worker | null) => {
+					store.commit('setProfile', worker);
+					resolve();
+				})
+				.catch(reject);
+		});
+	},
+	updateProfile(store: ActionContext<RootState, RootState>, worker: Worker): Promise<Worker | null> {
+		return new Promise((resolve, reject) => {
+			store.dispatch('updateWorker', worker)
+				.then((worker: Worker | null) => {
+					store.commit('setProfile', worker);
+					resolve();
 				})
 				.catch(reject);
 		});

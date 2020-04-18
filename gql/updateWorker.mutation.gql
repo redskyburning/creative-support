@@ -1,5 +1,5 @@
 mutation updateWorker(
-	$id: String!,
+	$id: uuid!,
 	$firstName: String!,
 	$lastName: String!,
 	$title: String!,
@@ -14,24 +14,39 @@ mutation updateWorker(
 	$userId: String!,
 	$location: String!
 ) {
-	insert_worker(objects: {
-		id: $id
-		description: $description,
-		facebook_url: $facebookUrl,
-		first_name: $firstName,
-		instagram_url: $instagramUrl,
-		last_name: $lastName,
-		location: $location,
-		other_url: $otherUrl,
-		patreon_url: $patreonUrl,
-		paypal_url: $paypalUrl,
-		website_url: $websiteUrl,
-		title: $title,
-		userId: $userId,
-		venmo_url: $venmoUrl
-	}) {
+	update_worker(
+		_set: {
+			description: $description,
+			facebook_url: $facebookUrl,
+			first_name: $firstName,
+			instagram_url: $instagramUrl,
+			last_name: $lastName,
+			location: $location,
+			other_url: $otherUrl,
+			patreon_url: $patreonUrl,
+			paypal_url: $paypalUrl,
+			website_url: $websiteUrl,
+			title: $title,
+			user_id: $userId,
+			venmo_url: $venmoUrl
+		},
+		where: {id: {_eq: $id}}
+	) {
 		returning {
 			id
+			firstName : first_name
+			lastName : last_name
+			description
+			facebookUrl : facebook_url
+			instagramUrl : instagram_url
+			location
+			otherUrl : other_url
+			patreonUrl : patreon_url
+			paypalUrl : paypal_url
+			websiteUrl: website_url
+			title
+			venmoUrl : venmo_url
+			userId: user_id
 		}
 	}
 }

@@ -1,5 +1,5 @@
 query getWorkerByUserId($userId: String!) {
-	worker(where: {userId: {_eq: $userId}}) {
+	worker(where: {user_id: {_eq: $userId}}) {
 		id
 		firstName: first_name
 		lastName: last_name
@@ -13,5 +13,6 @@ query getWorkerByUserId($userId: String!) {
 		websiteUrl: website_url
 		title
 		venmoUrl: venmo_url
+		userId: user_id
 	}
 }
