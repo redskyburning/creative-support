@@ -16,11 +16,20 @@
 					</div>
 				</b-navbar-item>
 				<b-navbar-item
+					v-if="$store.state.profileInitialized && !$store.state.profile"
 					class="app-nav__support"
 					tag="nuxt-link"
 					to="/register"
 				>
 					Register for Support
+				</b-navbar-item>
+				<b-navbar-item
+					v-if="$store.state.profileInitialized && $store.state.profile"
+					class="app-nav__profile"
+					tag="nuxt-link"
+					to="/profile"
+				>
+					Your Profile
 				</b-navbar-item>
 			</div>
 			<div class="app-nav__app-name">

@@ -8,6 +8,7 @@ export interface RootState {
 	token: any;
 	initialAuthComplete: boolean;
 	profile: Worker | null;
+	profileInitialized: boolean;
 }
 
 export interface Worker {

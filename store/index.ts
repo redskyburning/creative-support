@@ -29,6 +29,7 @@ export const state = (): RootState => ({
 	token: null,
 	initialAuthComplete: false,
 	profile: null,
+	profileInitialized: false,
 });
 
 export const mutations: MutationTree<RootState> = {
@@ -55,6 +56,9 @@ export const mutations: MutationTree<RootState> = {
 	},
 	setProfile(state: RootState, profile: Worker | null): void {
 		state.profile = profile;
+	},
+	setProfileInitialized(state: RootState, profileInitialized: boolean): void {
+		state.profileInitialized = profileInitialized;
 	},
 	setInitialAuthComplete(state: RootState, initialAuthComplete: any): void {
 		state.initialAuthComplete = initialAuthComplete;
@@ -234,6 +238,10 @@ export const actions: ActionTree<RootState, RootState> = {
 			profilePromise = new Promise((resolve, reject) => {
 				store.dispatch('loadProfile')
 					.then(() => {
+						if (!store.state.profileInitialized) {
+							store.commit('setProfileInitialized', true);
+						}
+
 						resolve();
 					})
 					.catch(reject);
