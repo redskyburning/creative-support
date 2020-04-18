@@ -28,6 +28,7 @@ export const state = (): RootState => ({
 	user: null,
 	token: null,
 	initialAuthComplete: false,
+	profile: null,
 });
 
 export const mutations: MutationTree<RootState> = {
@@ -51,6 +52,9 @@ export const mutations: MutationTree<RootState> = {
 	},
 	setToken(state: RootState, token: boolean): void {
 		state.token = token;
+	},
+	setProfile(state: RootState, profile: Worker | null): void {
+		state.profile = profile;
 	},
 	setInitialAuthComplete(state: RootState, initialAuthComplete: any): void {
 		state.initialAuthComplete = initialAuthComplete;
@@ -94,6 +98,11 @@ export const actions: ActionTree<RootState, RootState> = {
 						const token = await user.getIdToken();
 						store.commit('setToken', token);
 
+						store.dispatch('loadProfile')
+							.catch((error) => {
+								console.error(error);
+							});
+
 						if (!store.state.initialAuthComplete) {
 							store.commit('setInitialAuthComplete', true);
 							console.error('??? init complete');
@@ -102,6 +111,11 @@ export const actions: ActionTree<RootState, RootState> = {
 					} else {
 						store.commit('setUser', null);
 						store.commit('setToken', null);
+
+						store.dispatch('loadProfile')
+							.catch((error) => {
+								console.error(error);
+							});
 
 						if (!store.state.initialAuthComplete) {
 							store.commit('setInitialAuthComplete', true);
@@ -187,28 +201,40 @@ export const actions: ActionTree<RootState, RootState> = {
 				.catch(reject);
 		});
 	},
-	getWorkerByUserId(store: ActionContext<RootState, RootState>, userId: string): Promise<Worker> {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	getWorkerByUserId(store: ActionContext<RootState, RootState>, userId: string): Promise<Worker | null> {
 		return new Promise((resolve, reject) => {
-			store.dispatch('initAuth')
-				.then(() => {
-					if (store.state.user === null) {
-						return reject(Error('Invalid user id'));
+			this.app.apolloProvider.defaultClient.query({
+				query: getWorkerByUserId,
+				variables: {
+					userId,
+				},
+			})
+				.then((result: WorkersResult) => {
+					if (result.data.worker[0]) {
+						resolve(result.data.worker[0]);
+					} else {
+						resolve(null);
 					}
-
-					this.app.apolloProvider.defaultClient.query({
-						query: getWorkerByUserId,
-						variables: {
-							userId: store.state.user.uid,
-						},
-					})
-						.then((result: WorkersResult) => {
-							if (result.data.worker[0]) {
-								resolve(result.data.worker[0]);
-							} else {
-								reject(Error('No worker found'));
-							}
-						})
-						.catch(reject);
+				})
+				.catch(reject);
+		});
+	},
+	loadProfile(store: ActionContext<RootState, RootState>): Promise<Worker | null> {
+		return new Promise((resolve, reject) => {
+			store.dispatch('getCurrentUser')
+				.then((user) => {
+					if (user !== null) {
+						store.dispatch('getWorkerByUserId', user.uid)
+							.then((worker: Worker | null) => {
+								store.commit('setProfile', worker);
+								resolve();
+							})
+							.catch(reject);
+					} else {
+						store.commit('setProfile', null);
+						resolve();
+					}
 				})
 				.catch(reject);
 		});

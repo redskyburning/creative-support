@@ -25,6 +25,7 @@ import Vue from 'vue';
 import { Worker } from '~/types';
 import { blankWorker } from '~/mocks';
 import WorkerForm from '~/components/worker-form/worker-form.vue';
+// @ts-ignore
 import AddWorker from '~/gql/addWorker.mutation.gql';
 
 export default Vue.extend({
@@ -38,6 +39,13 @@ export default Vue.extend({
 				...blankWorker,
 			},
 		};
+	},
+	mounted(): void {
+		if (this.$store.state.profile !== null) {
+			this.$router.push({
+				path: '/profile',
+			});
+		}
 	},
 	methods: {
 		handleSubmit(worker:Worker) {

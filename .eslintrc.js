@@ -11,5 +11,6 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
+		'no-trailing-spaces'               : 'warn',
   }
 }

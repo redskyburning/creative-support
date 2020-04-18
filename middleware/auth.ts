@@ -5,7 +5,6 @@ const authMiddleware: Middleware = ({ store, redirect }) => {
 	return new Promise((resolve) => {
 		store.dispatch('getCurrentUser')
 			.then((user: AppUser | null) => {
-				console.error('???contact');
 				if (user === null) {
 					redirect('/');
 					resolve();

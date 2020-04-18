@@ -7,6 +7,7 @@ export interface RootState {
 	user: AppUser | null;
 	token: any;
 	initialAuthComplete: boolean;
+	profile: Worker | null;
 }
 
 export interface Worker {
