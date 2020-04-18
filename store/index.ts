@@ -72,6 +72,7 @@ export const getters: GetterTree<RootState, RootState> = {
 };
 
 let authPromise: Promise<void> | null = null;
+let profilePromise: Promise<void> | null = null;
 
 export const actions: ActionTree<RootState, RootState> = {
 	initAuth(store: ActionContext<RootState, RootState>): Promise<void> {
@@ -98,24 +99,13 @@ export const actions: ActionTree<RootState, RootState> = {
 						const token = await user.getIdToken();
 						store.commit('setToken', token);
 
-						store.dispatch('loadProfile')
-							.catch((error) => {
-								console.error(error);
-							});
-
 						if (!store.state.initialAuthComplete) {
 							store.commit('setInitialAuthComplete', true);
-							console.error('??? init complete');
 							resolve();
 						}
 					} else {
 						store.commit('setUser', null);
 						store.commit('setToken', null);
-
-						store.dispatch('loadProfile')
-							.catch((error) => {
-								console.error(error);
-							});
 
 						if (!store.state.initialAuthComplete) {
 							store.commit('setInitialAuthComplete', true);
@@ -183,7 +173,7 @@ export const actions: ActionTree<RootState, RootState> = {
 	init(store: ActionContext<RootState, RootState>): Promise<void> {
 		return new Promise((resolve, reject) => {
 			Promise.all([
-				store.dispatch('initAuth'),
+				store.dispatch('initProfile'),
 				store.dispatch('loadCategories'),
 			])
 				.then(() => {
@@ -238,5 +228,18 @@ export const actions: ActionTree<RootState, RootState> = {
 				})
 				.catch(reject);
 		});
+	},
+	initProfile(store: ActionContext<RootState, RootState>): Promise<void> {
+		if (profilePromise === null) {
+			profilePromise = new Promise((resolve, reject) => {
+				store.dispatch('loadProfile')
+					.then(() => {
+						resolve();
+					})
+					.catch(reject);
+			});
+		}
+
+		return profilePromise;
 	},
 };

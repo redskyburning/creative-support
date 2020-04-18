@@ -12,5 +12,7 @@ module.exports = {
   // add your custom rules here
   rules: {
 		'no-trailing-spaces'               : 'warn',
+		'no-unused-vars'                   : 'warn',
+		'@typescript-eslint/no-unused-vars'                   : 'warn',
   }
 }

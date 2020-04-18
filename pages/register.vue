@@ -30,6 +30,7 @@ import AddWorker from '~/gql/addWorker.mutation.gql';
 
 export default Vue.extend({
 	name: 'Register',
+	middleware: 'register',
 	components: {
 		WorkerForm,
 	},

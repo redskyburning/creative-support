@@ -37,24 +37,11 @@ export default Vue.extend({
 	data() {
 		return {
 			worker: {
-				...blankWorker,
+				...this.$store.state.profile,
 			},
 		};
 	},
-	middleware: 'auth',
-	mounted(): void {
-		this.$store.dispatch('getWorkerByUserId', this.$store.state.user.uid)
-			.then((worker: Worker) => {
-				this.worker = worker;
-			})
-			.catch((error: Error) => {
-				console.error(error);
-				this.$buefy.toast.open({
-					type: 'is-danger',
-					message: error.message,
-				});
-			});
-	},
+	middleware: 'profile',
 	methods: {
 		handleSubmit(worker:Worker) {
 			// @ts-ignore
