@@ -16,6 +16,8 @@ import getCategories from '~/gql/getCategories.query.gql';
 import getWorkers from '~/gql/getWorkers.query.gql';
 // @ts-ignore
 import getFilteredWorkers from '~/gql/getFilteredWorkers.query.gql';
+// @ts-ignore
+import getWorkerByUserId from '~/gql/getWorkerByUserId.query.gql';
 
 export const state = (): RootState => ({
 	workers: [],
@@ -84,11 +86,13 @@ export const actions: ActionTree<RootState, RootState> = {
 
 					const token = await user.getIdToken();
 					store.commit('setToken', token);
+					console.warn('???in');
 
 					resolve();
 				} else {
 					store.commit('setUser', null);
 					store.commit('setToken', null);
+					console.warn('???out');
 
 					resolve();
 				}
@@ -155,6 +159,28 @@ export const actions: ActionTree<RootState, RootState> = {
 			])
 				.then(() => {
 					resolve();
+				})
+				.catch(reject);
+		});
+	},
+	getWorkerByUserId(store: ActionContext<RootState, RootState>, userId: string): Promise<Worker> {
+		return new Promise((resolve, reject) => {
+			if (store.state.user === null) {
+				return reject(Error('Invalid user id'));
+			}
+
+			this.app.apolloProvider.defaultClient.query({
+				query: getWorkerByUserId,
+				variables: {
+					userId: store.state.user.uid,
+				},
+			})
+				.then((result: WorkersResult) => {
+					if (result.data.worker[0]) {
+						resolve(result.data.worker[0]);
+					} else {
+						reject(Error('No worker found'));
+					}
 				})
 				.catch(reject);
 		});

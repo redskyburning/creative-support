@@ -1,4 +1,4 @@
-query getWorkerByUid($userId: String!) {
+query getWorkerByUserId($userId: String!) {
 	worker(where: {userId: {_eq: $userId}}) {
 		id
 		firstName: first_name
