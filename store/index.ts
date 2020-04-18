@@ -27,6 +27,7 @@ export const state = (): RootState => ({
 	seed: 0,
 	user: null,
 	token: null,
+	initialAuthComplete: false,
 });
 
 export const mutations: MutationTree<RootState> = {
@@ -48,8 +49,11 @@ export const mutations: MutationTree<RootState> = {
 	setUser(state: RootState, user: any): void {
 		state.user = user;
 	},
-	setToken(state: RootState, token: any): void {
+	setToken(state: RootState, token: boolean): void {
 		state.token = token;
+	},
+	setInitialAuthComplete(state: RootState, initialAuthComplete: any): void {
+		state.initialAuthComplete = initialAuthComplete;
 	},
 };
 
@@ -63,41 +67,52 @@ export const getters: GetterTree<RootState, RootState> = {
 	},
 };
 
+let authPromise: Promise<void> | null = null;
+
 export const actions: ActionTree<RootState, RootState> = {
 	initAuth(store: ActionContext<RootState, RootState>): Promise<void> {
-		return new Promise((resolve) => {
-			// Find these options in your Firebase console
-			firebase.initializeApp({
-				apiKey: 'AIzaSyAq0Qum9t0kVQNT47ZMJretsY0l7L_j0ZI',
-				authDomain: 'creative-support-f274f.firebaseapp.com',
-				projectId: 'creative-support-f274f',
+		if (authPromise === null) {
+			authPromise = new Promise((resolve) => {
+				// Find these options in your Firebase console
+				firebase.initializeApp({
+					apiKey: 'AIzaSyAq0Qum9t0kVQNT47ZMJretsY0l7L_j0ZI',
+					authDomain: 'creative-support-f274f.firebaseapp.com',
+					projectId: 'creative-support-f274f',
+				});
+
+				firebase.auth().onAuthStateChanged(async(user) => {
+					if (user) {
+						const appUser: AppUser = {
+							uid: user.uid,
+							displayName: user.displayName || '',
+							email: user.email || '',
+							emailVerified: user.emailVerified,
+							photoURL: user.photoURL || '',
+						};
+						store.commit('setUser', appUser);
+
+						const token = await user.getIdToken();
+						store.commit('setToken', token);
+
+						if (!store.state.initialAuthComplete) {
+							store.commit('setInitialAuthComplete', true);
+							console.error('??? init complete');
+							resolve();
+						}
+					} else {
+						store.commit('setUser', null);
+						store.commit('setToken', null);
+
+						if (!store.state.initialAuthComplete) {
+							store.commit('setInitialAuthComplete', true);
+							resolve();
+						}
+					}
+				});
 			});
+		}
 
-			firebase.auth().onAuthStateChanged(async(user) => {
-				if (user) {
-					const appUser: AppUser = {
-						uid: user.uid,
-						displayName: user.displayName || '',
-						email: user.email || '',
-						emailVerified: user.emailVerified,
-						photoURL: user.photoURL || '',
-					};
-					store.commit('setUser', appUser);
-
-					const token = await user.getIdToken();
-					store.commit('setToken', token);
-					console.warn('???in');
-
-					resolve();
-				} else {
-					store.commit('setUser', null);
-					store.commit('setToken', null);
-					console.warn('???out');
-
-					resolve();
-				}
-			});
-		});
+		return authPromise;
 	},
 	auth(): Promise<void> {
 		return new Promise((resolve, reject) => {
@@ -163,24 +178,37 @@ export const actions: ActionTree<RootState, RootState> = {
 				.catch(reject);
 		});
 	},
+	getCurrentUser(store: ActionContext<RootState, RootState>): Promise<AppUser | null> {
+		return new Promise((resolve, reject) => {
+			store.dispatch('initAuth')
+				.then(() => {
+					resolve(store.state.user);
+				})
+				.catch(reject);
+		});
+	},
 	getWorkerByUserId(store: ActionContext<RootState, RootState>, userId: string): Promise<Worker> {
 		return new Promise((resolve, reject) => {
-			if (store.state.user === null) {
-				return reject(Error('Invalid user id'));
-			}
-
-			this.app.apolloProvider.defaultClient.query({
-				query: getWorkerByUserId,
-				variables: {
-					userId: store.state.user.uid,
-				},
-			})
-				.then((result: WorkersResult) => {
-					if (result.data.worker[0]) {
-						resolve(result.data.worker[0]);
-					} else {
-						reject(Error('No worker found'));
+			store.dispatch('initAuth')
+				.then(() => {
+					if (store.state.user === null) {
+						return reject(Error('Invalid user id'));
 					}
+
+					this.app.apolloProvider.defaultClient.query({
+						query: getWorkerByUserId,
+						variables: {
+							userId: store.state.user.uid,
+						},
+					})
+						.then((result: WorkersResult) => {
+							if (result.data.worker[0]) {
+								resolve(result.data.worker[0]);
+							} else {
+								reject(Error('No worker found'));
+							}
+						})
+						.catch(reject);
 				})
 				.catch(reject);
 		});

@@ -6,6 +6,7 @@ export interface RootState {
 	seed: number;
 	user: AppUser | null;
 	token: any;
+	initialAuthComplete: boolean;
 }
 
 export interface Worker {
