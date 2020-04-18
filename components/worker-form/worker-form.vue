@@ -4,80 +4,72 @@
 			v-if="worker"
 			@submit.prevent="handleSubmit"
 		>
-			<div class="worker-form__body">
-				<div class="worker-form__worker">
-					<div class="worker-form__fields">
-						<b-field label="First Name">
-							<b-input
-								v-model="worker.firstName"
-							/>
-						</b-field>
-						<b-field label="Last Name">
-							<b-input
-								v-model="worker.lastName"
-							/>
-						</b-field>
-						<b-field label="Title">
-							<b-input
-								v-model="worker.title"
-							/>
-						</b-field>
-						<b-field label="Location">
-							<b-input
-								v-model="worker.location"
-							/>
-						</b-field>
-					</div>
+			<div class="worker-form__fields">
+				<b-field label="First Name">
+					<b-input
+						v-model="worker.firstName"
+					/>
+				</b-field>
+				<b-field label="Last Name">
+					<b-input
+						v-model="worker.lastName"
+					/>
+				</b-field>
+				<b-field label="Title">
+					<b-input
+						v-model="worker.title"
+					/>
+				</b-field>
+				<b-field label="Location">
+					<b-input
+						v-model="worker.location"
+					/>
+				</b-field>
+			</div>
 
-					<b-field label="Description">
-						<b-input
-							v-model="worker.description"
-							type="textarea"
-						/>
-					</b-field>
-
-					<div class="worker-form__fields">
-						<b-field label="Instagram Url">
-							<b-input
-								v-model="worker.instagramUrl"
-							/>
-						</b-field>
-						<b-field label="Facebook Url">
-							<b-input
-								v-model="worker.facebookUrl"
-							/>
-						</b-field>
-						<b-field label="Website Url">
-							<b-input
-								v-model="worker.websiteUrl"
-							/>
-						</b-field>
-						<b-field label="Other Url">
-							<b-input
-								v-model="worker.otherUrl"
-							/>
-						</b-field>
-						<b-field label="Patreon Url">
-							<b-input
-								v-model="worker.patreonUrl"
-							/>
-						</b-field>
-						<b-field label="Paypal Url">
-							<b-input
-								v-model="worker.paypalUrl"
-							/>
-						</b-field>
-						<b-field label="Venmo Url">
-							<b-input
-								v-model="worker.venmoUrl"
-							/>
-						</b-field>
-					</div>
-				</div>
-				<worker-filter
-					class="worker-form__categories"
-					@change="handleCategoryChange"
+			<b-field label="Description">
+				<b-input
+					v-model="worker.description"
+					type="textarea"
 				/>
+			</b-field>
+
+			<div class="worker-form__fields">
+				<b-field label="Instagram Url">
+					<b-input
+						v-model="worker.instagramUrl"
+					/>
+				</b-field>
+				<b-field label="Facebook Url">
+					<b-input
+						v-model="worker.facebookUrl"
+					/>
+				</b-field>
+				<b-field label="Website Url">
+					<b-input
+						v-model="worker.websiteUrl"
+					/>
+				</b-field>
+				<b-field label="Other Url">
+					<b-input
+						v-model="worker.otherUrl"
+					/>
+				</b-field>
+				<b-field label="Patreon Url">
+					<b-input
+						v-model="worker.patreonUrl"
+					/>
+				</b-field>
+				<b-field label="Paypal Url">
+					<b-input
+						v-model="worker.paypalUrl"
+					/>
+				</b-field>
+				<b-field label="Venmo Url">
+					<b-input
+						v-model="worker.venmoUrl"
+					/>
+				</b-field>
 			</div>
 			<div class="section buttons is-right">
 				<b-button
@@ -92,18 +84,7 @@
 
 <style lang="scss">
 .worker-form {
-	&__body {
-		display:flex;
-		flex-direction: row;
-		justify-content: space-between;
-		align-items: stretch;
-
-		> * {
-			flex:0 1 calc(50% - #{$gap / 2});
-		}
-	}
-
-	/*&__fields {
+	&__fields {
 		display:flex;
 		flex-direction:row;
 		flex-wrap:wrap;
@@ -117,7 +98,7 @@
 				}
 			}
 		}
-	}*/
+	}
 }
 </style>
 
