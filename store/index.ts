@@ -35,6 +35,11 @@ import addWorkerCategory from '~/gql/addWorkerCategory.gql';
 // @ts-ignore
 import deleteWorkerCategory from '~/gql/deleteWorkerCategory.gql';
 import { getWorkerFromResponse } from '~/store/utils';
+import {
+	createWorkerCategories,
+	deleteWorkerCategories,
+	getWorkerCategoriesByWorkerId
+} from '~/client/workerCategory.client';
 
 export const state = (): RootState => ({
 	workers: [],
@@ -47,7 +52,7 @@ export const state = (): RootState => ({
 	initialAuthComplete: false,
 	profile: null,
 	profileInitialized: false,
-	foo: [],
+	profileCategories: [],
 });
 
 export const mutations: MutationTree<RootState> = {
@@ -74,10 +79,9 @@ export const mutations: MutationTree<RootState> = {
 	},
 	setProfile(state: RootState, profile: Worker | null): void {
 		state.profile = profile;
-		state.categories = profile && profile.categories ? profile.categories : [];
 	},
-	setFoo(state: RootState, categories: Category[]): void {
-		state.categories = categories;
+	setProfileCategories(state: RootState, categories: Category[]): void {
+		state.profileCategories = categories;
 	},
 	setProfileInitialized(state: RootState, profileInitialized: boolean): void {
 		state.profileInitialized = profileInitialized;
@@ -296,7 +300,12 @@ export const actions: ActionTree<RootState, RootState> = {
 						store.dispatch('getWorkerByUserId', user.uid)
 							.then((worker: Worker | null) => {
 								store.commit('setProfile', worker);
-								resolve();
+
+								store.dispatch('loadProfileCategories')
+									.then(() => {
+										resolve();
+									})
+									.catch(reject);
 							})
 							.catch(reject);
 					} else {
@@ -324,18 +333,52 @@ export const actions: ActionTree<RootState, RootState> = {
 
 		return profilePromise;
 	},
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	addWorkerCategory(store: ActionContext<RootState, RootState>, workerCategory : WorkerCategory): Promise<Worker | null> {
-		return this.app.apolloProvider.defaultClient.mutate({
-			mutation: addWorkerCategory,
-			variables: workerCategory,
+	loadProfileCategories(store: ActionContext<RootState, RootState>): Promise<void> {
+		return new Promise((resolve, reject) => {
+			if (!(store.state.profile && store.state.profile.id)) {
+				return reject(Error('No worker id found!'));
+			}
+
+			getWorkerCategoriesByWorkerId(this.app.apolloProvider.defaultClient, store.state.profile.id)
+				.then((cats) => {
+					store.commit('setProfileCategories', cats);
+					resolve();
+				})
+				.catch(reject);
 		});
 	},
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	deleteWorkerCategory(store: ActionContext<RootState, RootState>, params : WorkerCategory): Promise<Worker | null> {
-		return this.app.apolloProvider.defaultClient.mutate({
-			mutation: deleteWorkerCategory,
-			variables: params,
+	addProfileCategories(store: ActionContext<RootState, RootState>, categoryIds: number[]): Promise<void> {
+		return new Promise((resolve, reject) => {
+			if (!(store.state.profile && store.state.profile.id)) {
+				return reject(Error('No worker id found!'));
+			}
+
+			createWorkerCategories(this.app.apolloProvider.defaultClient, store.state.profile.id, categoryIds)
+				.then(() => {
+					store.dispatch('loadProfileCategories')
+						.then(() => {
+							resolve();
+						})
+						.catch(reject);
+				})
+				.catch(reject);
+		});
+	},
+	removeProfileCategories(store: ActionContext<RootState, RootState>, categoryIds: number[]): Promise<void> {
+		return new Promise((resolve, reject) => {
+			if (!(store.state.profile && store.state.profile.id)) {
+				return reject(Error('No worker id found!'));
+			}
+
+			deleteWorkerCategories(this.app.apolloProvider.defaultClient, store.state.profile.id, categoryIds)
+				.then(() => {
+					store.dispatch('loadProfileCategories')
+						.then(() => {
+							resolve();
+						})
+						.catch(reject);
+				})
+				.catch(reject);
 		});
 	},
 };

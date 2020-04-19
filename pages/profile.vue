@@ -11,7 +11,7 @@
 			</div>
 			<div class="tags">
 				<b-tag
-					v-for="category in $store.state.profile.categories"
+					v-for="category in $store.state.profileCategories"
 					:key="category.id"
 					size="is-medium"
 					closable
@@ -41,8 +41,6 @@ import Vue from 'vue';
 
 import { Category, Worker } from '~/types';
 import WorkerForm from '~/components/worker-form/worker-form.vue';
-// @ts-ignore
-import UpdateWorker from '~/gql/updateWorker.mutation.gql';
 
 export default Vue.extend({
 	name: 'Profile',
@@ -75,25 +73,12 @@ export default Vue.extend({
 				});
 		},
 		handleAdd() {
-			this.$store.dispatch('addWorkerCategory', {
-				workerId: this.$store.state.profile.id,
-				categoryId: 2,
-			})
+			this.$store.dispatch('addProfileCategories', [2])
 				.then(() => {
-					this.$store.dispatch('loadProfile')
-						.then(() => {
-							this.$buefy.toast.open({
-								type: 'is-success',
-								message: 'Profile updated',
-							});
-						})
-						.catch((error: Error) => {
-							console.error(error);
-							this.$buefy.toast.open({
-								type: 'is-danger',
-								message: error.message,
-							});
-						});
+					this.$buefy.toast.open({
+						type: 'is-success',
+						message: 'Profile updated',
+					});
 				})
 				.catch((error: Error) => {
 					console.error(error);
@@ -104,25 +89,12 @@ export default Vue.extend({
 				});
 		},
 		handleDelete(category: Category) {
-			this.$store.dispatch('deleteWorkerCategory', {
-				workerId: this.$store.state.profile.id,
-				categoryId: category.id,
-			})
+			this.$store.dispatch('removeProfileCategories', [category.id])
 				.then(() => {
-					this.$store.dispatch('loadProfile')
-						.then(() => {
-							this.$buefy.toast.open({
-								type: 'is-success',
-								message: `${ category.name } removed`,
-							});
-						})
-						.catch((error: Error) => {
-							console.error(error);
-							this.$buefy.toast.open({
-								type: 'is-danger',
-								message: error.message,
-							});
-						});
+					this.$buefy.toast.open({
+						type: 'is-success',
+						message: `${ category.name } removed`,
+					});
 				})
 				.catch((error: Error) => {
 					console.error(error);

@@ -6,13 +6,5 @@ export function getWorkerFromResponse(result: WorkerResponse): Worker {
 
 	return {
 		...worker,
-		categories: workerCategories.map(({ category }) => {
-			const { id, name } = category;
-
-			return {
-				id,
-				name,
-			};
-		}),
 	};
 }

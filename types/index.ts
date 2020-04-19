@@ -9,11 +9,11 @@ export interface RootState {
 	initialAuthComplete: boolean;
 	profile: Worker | null;
 	profileInitialized: boolean;
-	foo: Category[];
+	profileCategories: Category[];
 }
 
 export interface Worker {
-	id?: number;
+	id?: string;
 	firstName: string;
 	lastName: string;
 	title: string;
@@ -26,7 +26,6 @@ export interface Worker {
 	patreonUrl?: string;
 	paypalUrl?: string;
 	venmoUrl?: string;
-	categories?: Category[];
 }
 
 export interface Category {
@@ -96,4 +95,15 @@ export interface AddWorkerParams {
 export interface WorkerCategory {
 	workerId: string;
 	categoryId: number;
+}
+
+export interface GetWorkerCategoryResponse {
+	worker_id: string;
+	category: Category;
+}
+
+export interface GetWorkerCategoriesResponse {
+	data: {
+		worker_category: GetWorkerCategoryResponse[]
+	}
 }
