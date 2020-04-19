@@ -15,7 +15,7 @@ import {
 	Category,
 	CategoryResult,
 	RootState, UpdateWorkerResponse,
-	Worker,
+	Worker, WorkerCategory,
 	WorkersResult,
 } from '~/types';
 // @ts-ignore
@@ -30,6 +30,10 @@ import getWorkerByUserId from '~/gql/getWorkerByUserId.query.gql';
 import updateWorker from '~/gql/updateWorker.mutation.gql';
 // @ts-ignore
 import addWorker from '~/gql/addWorker.mutation.gql';
+// @ts-ignore
+import addWorkerCategory from '~/gql/addWorkerCategory.gql';
+// @ts-ignore
+import deleteWorkerCategory from '~/gql/deleteWorkerCategory.gql';
 import { getWorkerFromResponse } from '~/store/utils';
 
 export const state = (): RootState => ({
@@ -68,7 +72,9 @@ export const mutations: MutationTree<RootState> = {
 		state.token = token;
 	},
 	setProfile(state: RootState, profile: Worker | null): void {
-		state.profile = profile;
+		state.profile = {
+			...profile,
+		};
 	},
 	setProfileInitialized(state: RootState, profileInitialized: boolean): void {
 		state.profileInitialized = profileInitialized;
@@ -211,11 +217,13 @@ export const actions: ActionTree<RootState, RootState> = {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	getWorkerByUserId(store: ActionContext<RootState, RootState>, userId: string): Promise<Worker | null> {
 		return new Promise((resolve, reject) => {
+			console.warn('???', this.app.apolloProvider.defaultClient);
 			this.app.apolloProvider.defaultClient.query({
 				query: getWorkerByUserId,
 				variables: {
 					userId,
 				},
+				fetchPolicy: 'no-cache',
 			})
 				.then((result: WorkersResult) => {
 					if (result.data.worker[0]) {
@@ -313,5 +321,19 @@ export const actions: ActionTree<RootState, RootState> = {
 		}
 
 		return profilePromise;
+	},
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	addWorkerCategory(store: ActionContext<RootState, RootState>, workerCategory : WorkerCategory): Promise<Worker | null> {
+		return this.app.apolloProvider.defaultClient.mutate({
+			mutation: addWorkerCategory,
+			variables: workerCategory,
+		});
+	},
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	deleteWorkerCategory(store: ActionContext<RootState, RootState>, params : WorkerCategory): Promise<Worker | null> {
+		return this.app.apolloProvider.defaultClient.mutate({
+			mutation: deleteWorkerCategory,
+			variables: params,
+		});
 	},
 };

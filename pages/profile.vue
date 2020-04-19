@@ -5,16 +5,22 @@
 				<span>Your Profile</span>
 			</h1>
 		</div>
-		<div class="tags">
-			<b-tag
-				v-for="category in worker.categories"
-				:key="category.id"
-				size="is-medium"
-				closable
-				@close="handleClose(category.id)"
-			>
-				{{ category.name }}
-			</b-tag>
+		<div class="profile__categories">
+			<div class="subtitle">
+				Categories <a @click="handleAdd">Add</a>
+			</div>
+			<pre>{{ worker.categories }}</pre>
+			<div class="tags">
+				<b-tag
+					v-for="category in worker.categories"
+					:key="category.id"
+					size="is-medium"
+					closable
+					@close="handleDelete(category)"
+				>
+					{{ category.name }}
+				</b-tag>
+			</div>
 		</div>
 		<div class="page__body content">
 			<worker-form
@@ -34,7 +40,7 @@
 <script lang="ts">
 import Vue from 'vue';
 
-import { Worker } from '~/types';
+import { Category, Worker } from '~/types';
 import WorkerForm from '~/components/worker-form/worker-form.vue';
 // @ts-ignore
 import UpdateWorker from '~/gql/updateWorker.mutation.gql';
@@ -60,6 +66,64 @@ export default Vue.extend({
 						type: 'is-success',
 						message: 'Profile Updated!',
 					});
+				})
+				.catch((error: Error) => {
+					console.error(error);
+					this.$buefy.toast.open({
+						type: 'is-danger',
+						message: error.message,
+					});
+				});
+		},
+		handleAdd() {
+			this.$store.dispatch('addWorkerCategory', {
+				workerId: this.$store.state.profile.id,
+				categoryId: 2,
+			})
+				.then(() => {
+					this.$store.dispatch('loadProfile')
+						.then(() => {
+							this.$buefy.toast.open({
+								type: 'is-success',
+								message: 'Profile updated',
+							});
+						})
+						.catch((error: Error) => {
+							console.error(error);
+							this.$buefy.toast.open({
+								type: 'is-danger',
+								message: error.message,
+							});
+						});
+				})
+				.catch((error: Error) => {
+					console.error(error);
+					this.$buefy.toast.open({
+						type: 'is-danger',
+						message: error.message,
+					});
+				});
+		},
+		handleDelete(category: Category) {
+			this.$store.dispatch('deleteWorkerCategory', {
+				workerId: this.$store.state.profile.id,
+				categoryId: category.id,
+			})
+				.then(() => {
+					this.$store.dispatch('loadProfile')
+						.then(() => {
+							this.$buefy.toast.open({
+								type: 'is-success',
+								message: `${ category.name } removed`,
+							});
+						})
+						.catch((error: Error) => {
+							console.error(error);
+							this.$buefy.toast.open({
+								type: 'is-danger',
+								message: error.message,
+							});
+						});
 				})
 				.catch((error: Error) => {
 					console.error(error);

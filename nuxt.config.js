@@ -37,6 +37,7 @@ export default {
 		'@nuxt/typescript-build',
 		'@nuxtjs/eslint-module',
 		'@nuxtjs/style-resources',
+		'@nuxtjs/apollo',
 	],
 	/*
   ** Nuxt.js modules
@@ -48,7 +49,6 @@ export default {
 		'@nuxtjs/axios',
 		// Doc: https://github.com/nuxt-community/dotenv-module
 		'@nuxtjs/dotenv',
-		'@nuxtjs/apollo',
 	],
 	/*
   ** Axios module configuration
@@ -82,5 +82,9 @@ export default {
 				httpEndpoint: 'https://creative-support-hasura.herokuapp.com/v1/graphql',
 			},
 		},
+	},
+	buefy: {
+		defaultToastDuration: 4000,
+		defaultToastPosition: 'is-bottom-right',
 	},
 };

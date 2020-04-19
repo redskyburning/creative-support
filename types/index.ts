@@ -91,3 +91,8 @@ export interface AddWorkerParams {
 	worker: Worker;
 	user: AppUser;
 }
+
+export interface WorkerCategory {
+	workerId: string;
+	categoryId: number;
+}

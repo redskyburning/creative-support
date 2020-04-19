@@ -5,5 +5,10 @@ mutation AddWorkerCategory(
 	insert_worker_category(objects: {
 		category_id: $categoryId,
 		worker_id: $workerId
-	})
+	}) {
+		returning {
+			categoryId: category_id,
+			workerId: worker_id,
+		}
+	}
 }
