@@ -73,7 +73,7 @@ export default Vue.extend({
 				});
 		},
 		handleAdd() {
-			this.$store.dispatch('addProfileCategories', [2])
+			this.$store.dispatch('addProfileCategories', [3])
 				.then(() => {
 					this.$buefy.toast.open({
 						type: 'is-success',

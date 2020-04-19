@@ -1,6 +1,11 @@
 import ApolloClient from 'apollo-client';
 
-import { Category, GetWorkerCategoriesResponse } from '~/types';
+import {
+	Category,
+	CreateWorkerCategoriesResponse,
+	GetWorkerCategoriesResponse,
+	GetWorkerCategoryResponse
+} from '~/types';
 // @ts-ignore
 import createWorkerCategoriesMutation from '~/gql/createWorkerCategories.gql';
 // @ts-ignore
@@ -35,6 +40,25 @@ export function createWorkerCategories(apollo: ApolloClient<any>, workerId: stri
 					};
 				}),
 			},
+			update: (cache, response) => {
+				try {
+					const options = {
+						query: getWorkerCategoriesByWorkerIdQuery,
+						variables: {
+							workerId,
+						},
+					};
+					const data: any = cache.readQuery(options);
+					data.worker_category = response.data.insert_worker_category.returning.concat(data.worker_category);
+
+					cache.writeQuery({
+						...options,
+						data,
+					});
+				} catch (e) {
+					console.error(e);
+				}
+			},
 		})
 			.then(() => {
 				resolve();
@@ -50,6 +74,26 @@ export function deleteWorkerCategories(apollo: ApolloClient<any>, workerId: stri
 			variables: {
 				workerId,
 				categoryIds,
+			},
+			update: (cache) => {
+				try {
+					const options = {
+						query: getWorkerCategoriesByWorkerIdQuery,
+						variables: {
+							workerId,
+						},
+					};
+					const data: any = cache.readQuery(options);
+					data.worker_category = data.worker_category.filter((cat: GetWorkerCategoryResponse) => !categoryIds.includes(cat.category.id));
+					console.warn('???', data.worker_category)
+
+					cache.writeQuery({
+						...options,
+						data,
+					});
+				} catch (e) {
+					console.error(e);
+				}
 			},
 		})
 			.then(() => {

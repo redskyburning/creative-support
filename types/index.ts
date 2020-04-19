@@ -107,3 +107,11 @@ export interface GetWorkerCategoriesResponse {
 		worker_category: GetWorkerCategoryResponse[]
 	}
 }
+
+export interface CreateWorkerCategoriesResponse {
+	data: {
+		insert_worker_category: {
+			returning: GetWorkerCategoryResponse[]
+		}
+	}
+}

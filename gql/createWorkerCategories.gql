@@ -3,8 +3,11 @@ mutation createWorkerCategories(
 ) {
 	insert_worker_category(objects: $objects) {
 		returning {
-			categoryId: category_id,
-			workerId: worker_id,
+			worker_id
+			category {
+				id
+				name
+			}
 		}
 	}
 }
