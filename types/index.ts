@@ -9,6 +9,7 @@ export interface RootState {
 	initialAuthComplete: boolean;
 	profile: Worker | null;
 	profileInitialized: boolean;
+	foo: Category[];
 }
 
 export interface Worker {

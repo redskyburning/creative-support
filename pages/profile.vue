@@ -9,10 +9,9 @@
 			<div class="subtitle">
 				Categories <a @click="handleAdd">Add</a>
 			</div>
-			<pre>{{ worker.categories }}</pre>
 			<div class="tags">
 				<b-tag
-					v-for="category in worker.categories"
+					v-for="category in $store.state.profile.categories"
 					:key="category.id"
 					size="is-medium"
 					closable

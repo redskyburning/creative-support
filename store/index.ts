@@ -47,6 +47,7 @@ export const state = (): RootState => ({
 	initialAuthComplete: false,
 	profile: null,
 	profileInitialized: false,
+	foo: [],
 });
 
 export const mutations: MutationTree<RootState> = {
@@ -72,9 +73,11 @@ export const mutations: MutationTree<RootState> = {
 		state.token = token;
 	},
 	setProfile(state: RootState, profile: Worker | null): void {
-		state.profile = {
-			...profile,
-		};
+		state.profile = profile;
+		state.categories = profile && profile.categories ? profile.categories : [];
+	},
+	setFoo(state: RootState, categories: Category[]): void {
+		state.categories = categories;
 	},
 	setProfileInitialized(state: RootState, profileInitialized: boolean): void {
 		state.profileInitialized = profileInitialized;
@@ -217,7 +220,6 @@ export const actions: ActionTree<RootState, RootState> = {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	getWorkerByUserId(store: ActionContext<RootState, RootState>, userId: string): Promise<Worker | null> {
 		return new Promise((resolve, reject) => {
-			console.warn('???', this.app.apolloProvider.defaultClient);
 			this.app.apolloProvider.defaultClient.query({
 				query: getWorkerByUserId,
 				variables: {
