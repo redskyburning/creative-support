@@ -1,8 +1,19 @@
 import { Worker, WorkerResponse } from '~/types';
 
-export function getWorkerFromResult(result: WorkerResponse): Worker {
+export function getWorkerFromResponse(result: WorkerResponse): Worker {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { __typename, ...worker } = result;
+	const { __typename, workerCategories, ...worker } = result;
 
-	return worker;
+	console.warn('???', workerCategories);
+	return {
+		...worker,
+		categories: workerCategories.map(({ category }) => {
+			const { id, name } = category;
+
+			return {
+				id,
+				name,
+			};
+		}),
+	};
 }

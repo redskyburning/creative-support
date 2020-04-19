@@ -14,5 +14,11 @@ query getWorkerByUserId($userId: String!) {
 		title
 		venmoUrl: venmo_url
 		userId: user_id
+		workerCategories: worker_categories {
+			category {
+				id
+				name
+			}
+		}
 	}
 }

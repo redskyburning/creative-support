@@ -30,7 +30,7 @@ import getWorkerByUserId from '~/gql/getWorkerByUserId.query.gql';
 import updateWorker from '~/gql/updateWorker.mutation.gql';
 // @ts-ignore
 import addWorker from '~/gql/addWorker.mutation.gql';
-import { getWorkerFromResult } from '~/store/utils';
+import { getWorkerFromResponse } from '~/store/utils';
 
 export const state = (): RootState => ({
 	workers: [],
@@ -219,7 +219,7 @@ export const actions: ActionTree<RootState, RootState> = {
 			})
 				.then((result: WorkersResult) => {
 					if (result.data.worker[0]) {
-						resolve(getWorkerFromResult(result.data.worker[0]));
+						resolve(getWorkerFromResponse(result.data.worker[0]));
 					} else {
 						resolve(null);
 					}
@@ -238,7 +238,7 @@ export const actions: ActionTree<RootState, RootState> = {
 				},
 			})
 				.then((response: AddWorkerResponse) => {
-					resolve(getWorkerFromResult(response.data.insert_worker.returning[0]));
+					resolve(getWorkerFromResponse(response.data.insert_worker.returning[0]));
 				})
 				.catch(reject);
 		});
@@ -253,7 +253,7 @@ export const actions: ActionTree<RootState, RootState> = {
 				},
 			})
 				.then((response: UpdateWorkerResponse) => {
-					resolve(getWorkerFromResult(response.data.update_worker.returning[0]));
+					resolve(getWorkerFromResponse(response.data.update_worker.returning[0]));
 				})
 				.catch(reject);
 		});

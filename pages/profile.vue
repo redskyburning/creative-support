@@ -5,6 +5,17 @@
 				<span>Your Profile</span>
 			</h1>
 		</div>
+		<div class="tags">
+			<b-tag
+				v-for="category in worker.categories"
+				:key="category.id"
+				size="is-medium"
+				closable
+				@close="handleClose(category.id)"
+			>
+				{{ category.name }}
+			</b-tag>
+		</div>
 		<div class="page__body content">
 			<worker-form
 				v-if="worker"

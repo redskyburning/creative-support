@@ -25,6 +25,7 @@ export interface Worker {
 	patreonUrl?: string;
 	paypalUrl?: string;
 	venmoUrl?: string;
+	categories?: Category[];
 }
 
 export interface Category {
@@ -43,8 +44,15 @@ export interface CategoryResult {
 	}
 }
 
+export interface CategoryResponseItem {
+
+}
+
 export interface WorkerResponse extends Worker{
 	__typename: string;
+	workerCategories: {
+		category: Category;
+	}[]
 }
 
 export interface WorkersResult {

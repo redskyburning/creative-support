@@ -94,7 +94,7 @@ export default Vue.extend({
 	props: {
 		showAll: {
 			type: Boolean,
-			required: true,
+			required: false,
 			default: () => false,
 		},
 	},
