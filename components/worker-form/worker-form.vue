@@ -75,7 +75,7 @@
 				<b-button
 					tag="input"
 					native-type="submit"
-					value="Submit"
+					value="Save"
 				/>
 			</div>
 		</form>

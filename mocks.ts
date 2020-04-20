@@ -1,7 +1,7 @@
 import { Worker } from '~/types';
 
 export const mockWorker: Worker = {
-	id: 1,
+	id: 'abc',
 	firstName: 'Testy',
 	lastName: 'McGee',
 	title: 'Director',

@@ -99,6 +99,9 @@ export const getters: GetterTree<RootState, RootState> = {
 			return null;
 		}
 	},
+	profileCategoryIds(state: RootState): number[] {
+		return state.profileCategories.map(cat => cat.id);
+	},
 };
 
 let authPromise: Promise<void> | null = null;
