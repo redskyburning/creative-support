@@ -1,0 +1,18 @@
+query getWorkerByUserId($userId: String!) {
+	worker(where: {user_id: {_eq: $userId}}) {
+		id
+		firstName: first_name
+		lastName: last_name
+		description
+		facebookUrl: facebook_url
+		instagramUrl: instagram_url
+		location
+		otherUrl: other_url
+		patreonUrl: patreon_url
+		paypalUrl: paypal_url
+		websiteUrl: website_url
+		title
+		venmoUrl: venmo_url
+		userId: user_id
+	}
+}

@@ -1,0 +1,11 @@
+mutation AddWorkerCategory(
+	$categoryId: Int!,
+	$workerId: uuid!,
+) {
+	delete_worker_category(where: {
+		category_id: { _eq: $categoryId },
+		worker_id: { _eq: $workerId }
+	}) {
+		affected_rows
+	}
+}

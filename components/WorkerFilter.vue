@@ -1,7 +1,10 @@
 <template>
 	<div class="worker-filter">
 		<div class="worker-filter__filters section">
-			<div class="field">
+			<div
+				v-if="showAll"
+				class="field"
+			>
 				<b-checkbox
 					v-model="isAll"
 					type="is-yella"
@@ -12,7 +15,7 @@
 				</b-checkbox>
 			</div>
 
-			<hr>
+			<hr v-if="showAll">
 
 			<div
 				v-for="selection in selections"
@@ -88,6 +91,13 @@ import { Category, CategorySelection } from '~/types';
 
 export default Vue.extend({
 	name: 'WorkerFilter',
+	props: {
+		showAll: {
+			type: Boolean,
+			required: false,
+			default: () => false,
+		},
+	},
 	data() {
 		return {
 			isAll: true,

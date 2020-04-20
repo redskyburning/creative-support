@@ -5,14 +5,41 @@ import {
 	GetterTree,
 } from 'vuex';
 
-import { Category, CategoryResult, RootState, Worker, WorkersResult } from '~/types';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
+
+import {
+	AddWorkerParams, AddWorkerResponse,
+	AppUser,
+	Category,
+	CategoryResult,
+	RootState, UpdateWorkerResponse,
+	Worker, WorkerCategory,
+	WorkersResult,
+} from '~/types';
 // @ts-ignore
 import getCategories from '~/gql/getCategories.query.gql';
 // @ts-ignore
 import getWorkers from '~/gql/getWorkers.query.gql';
 // @ts-ignore
 import getFilteredWorkers from '~/gql/getFilteredWorkers.query.gql';
-import { RuleSetQuery } from 'webpack';
+// @ts-ignore
+import getWorkerByUserId from '~/gql/getWorkerByUserId.query.gql';
+// @ts-ignore
+import updateWorker from '~/gql/updateWorker.mutation.gql';
+// @ts-ignore
+import addWorker from '~/gql/addWorker.mutation.gql';
+// @ts-ignore
+import addWorkerCategory from '~/gql/addWorkerCategory.gql';
+// @ts-ignore
+import deleteWorkerCategory from '~/gql/deleteWorkerCategory.gql';
+import { getWorkerFromResponse } from '~/store/utils';
+import {
+	createWorkerCategories,
+	deleteWorkerCategories,
+	getWorkerCategoriesByWorkerId
+} from '~/client/workerCategory.client';
 
 export const state = (): RootState => ({
 	workers: [],
@@ -20,6 +47,12 @@ export const state = (): RootState => ({
 	isLoading: true,
 	categories: [],
 	seed: 0,
+	user: null,
+	token: null,
+	initialAuthComplete: false,
+	profile: null,
+	profileInitialized: false,
+	profileCategories: [],
 });
 
 export const mutations: MutationTree<RootState> = {
@@ -38,6 +71,24 @@ export const mutations: MutationTree<RootState> = {
 	setSeed(state: RootState, seed: number): void {
 		state.seed = seed;
 	},
+	setUser(state: RootState, user: any): void {
+		state.user = user;
+	},
+	setToken(state: RootState, token: boolean): void {
+		state.token = token;
+	},
+	setProfile(state: RootState, profile: Worker | null): void {
+		state.profile = profile;
+	},
+	setProfileCategories(state: RootState, categories: Category[]): void {
+		state.profileCategories = categories;
+	},
+	setProfileInitialized(state: RootState, profileInitialized: boolean): void {
+		state.profileInitialized = profileInitialized;
+	},
+	setInitialAuthComplete(state: RootState, initialAuthComplete: any): void {
+		state.initialAuthComplete = initialAuthComplete;
+	},
 };
 
 export const getters: GetterTree<RootState, RootState> = {
@@ -48,9 +99,71 @@ export const getters: GetterTree<RootState, RootState> = {
 			return null;
 		}
 	},
+	profileCategoryIds(state: RootState): number[] {
+		return state.profileCategories.map(cat => cat.id);
+	},
 };
 
+let authPromise: Promise<void> | null = null;
+let profilePromise: Promise<void> | null = null;
+
 export const actions: ActionTree<RootState, RootState> = {
+	initAuth(store: ActionContext<RootState, RootState>): Promise<void> {
+		if (authPromise === null) {
+			authPromise = new Promise((resolve) => {
+				// Find these options in your Firebase console
+				firebase.initializeApp({
+					apiKey: 'AIzaSyAq0Qum9t0kVQNT47ZMJretsY0l7L_j0ZI',
+					authDomain: 'creative-support-f274f.firebaseapp.com',
+					projectId: 'creative-support-f274f',
+				});
+
+				firebase.auth().onAuthStateChanged(async(user) => {
+					if (user) {
+						const appUser: AppUser = {
+							uid: user.uid,
+							displayName: user.displayName || '',
+							email: user.email || '',
+							emailVerified: user.emailVerified,
+							photoURL: user.photoURL || '',
+						};
+						store.commit('setUser', appUser);
+
+						const token = await user.getIdToken();
+						store.commit('setToken', token);
+
+						if (!store.state.initialAuthComplete) {
+							store.commit('setInitialAuthComplete', true);
+							resolve();
+						}
+					} else {
+						store.commit('setUser', null);
+						store.commit('setToken', null);
+
+						if (!store.state.initialAuthComplete) {
+							store.commit('setInitialAuthComplete', true);
+							resolve();
+						}
+					}
+				});
+			});
+		}
+
+		return authPromise;
+	},
+	auth(): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const provider = new firebase.auth.GoogleAuthProvider();
+			firebase.auth().signInWithPopup(provider)
+				.then(() => {
+					resolve();
+				})
+				.catch(reject);
+		});
+	},
+	logout(): Promise<void> {
+		return firebase.auth().signOut();
+	},
 	shuffle(store: ActionContext<RootState, RootState>): Promise<void> {
 		return new Promise((resolve) => {
 			store.commit('setSeed', Math.random());
@@ -60,7 +173,7 @@ export const actions: ActionTree<RootState, RootState> = {
 	loadWorkers(store: ActionContext<RootState, RootState>, categoryIds: number[] = []): Promise<void> {
 		return new Promise((resolve, reject) => {
 			const hasCats = categoryIds.length > 0;
-			const query: RuleSetQuery = {
+			const query:any = {
 				query: hasCats ? getFilteredWorkers : getWorkers,
 			};
 
@@ -92,9 +205,181 @@ export const actions: ActionTree<RootState, RootState> = {
 	},
 	init(store: ActionContext<RootState, RootState>): Promise<void> {
 		return new Promise((resolve, reject) => {
-			store.dispatch('loadCategories')
+			Promise.all([
+				store.dispatch('initProfile'),
+				store.dispatch('loadCategories'),
+			])
 				.then(() => {
 					resolve();
+				})
+				.catch(reject);
+		});
+	},
+	getCurrentUser(store: ActionContext<RootState, RootState>): Promise<AppUser | null> {
+		return new Promise((resolve, reject) => {
+			store.dispatch('initAuth')
+				.then(() => {
+					resolve(store.state.user);
+				})
+				.catch(reject);
+		});
+	},
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	getWorkerByUserId(store: ActionContext<RootState, RootState>, userId: string): Promise<Worker | null> {
+		return new Promise((resolve, reject) => {
+			this.app.apolloProvider.defaultClient.query({
+				query: getWorkerByUserId,
+				variables: {
+					userId,
+				},
+				fetchPolicy: 'no-cache',
+			})
+				.then((result: WorkersResult) => {
+					if (result.data.worker[0]) {
+						resolve(getWorkerFromResponse(result.data.worker[0]));
+					} else {
+						resolve(null);
+					}
+				})
+				.catch(reject);
+		});
+	},
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	addWorker(store: ActionContext<RootState, RootState>, { worker, user } : AddWorkerParams): Promise<Worker | null> {
+		return new Promise((resolve, reject) => {
+			this.app.apolloProvider.defaultClient.mutate({
+				mutation: addWorker,
+				variables: {
+					...worker,
+					userId: user.uid,
+				},
+			})
+				.then((response: AddWorkerResponse) => {
+					resolve(getWorkerFromResponse(response.data.insert_worker.returning[0]));
+				})
+				.catch(reject);
+		});
+	},
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	updateWorker(store: ActionContext<RootState, RootState>, worker: Worker): Promise<Worker | null> {
+		return new Promise((resolve, reject) => {
+			this.app.apolloProvider.defaultClient.mutate({
+				mutation: updateWorker,
+				variables: {
+					...worker,
+				},
+			})
+				.then((response: UpdateWorkerResponse) => {
+					resolve(getWorkerFromResponse(response.data.update_worker.returning[0]));
+				})
+				.catch(reject);
+		});
+	},
+	addProfile(store: ActionContext<RootState, RootState>, params: AddWorkerParams): Promise<Worker | null> {
+		return new Promise((resolve, reject) => {
+			store.dispatch('addWorker', params)
+				.then((worker: Worker | null) => {
+					store.commit('setProfile', worker);
+					resolve();
+				})
+				.catch(reject);
+		});
+	},
+	updateProfile(store: ActionContext<RootState, RootState>, worker: Worker): Promise<Worker | null> {
+		return new Promise((resolve, reject) => {
+			store.dispatch('updateWorker', worker)
+				.then((worker: Worker | null) => {
+					store.commit('setProfile', worker);
+					resolve();
+				})
+				.catch(reject);
+		});
+	},
+	loadProfile(store: ActionContext<RootState, RootState>): Promise<Worker | null> {
+		return new Promise((resolve, reject) => {
+			store.dispatch('getCurrentUser')
+				.then((user) => {
+					if (user !== null) {
+						store.dispatch('getWorkerByUserId', user.uid)
+							.then((worker: Worker | null) => {
+								store.commit('setProfile', worker);
+
+								store.dispatch('loadProfileCategories')
+									.then(() => {
+										resolve();
+									})
+									.catch(reject);
+							})
+							.catch(reject);
+					} else {
+						store.commit('setProfile', null);
+						resolve();
+					}
+				})
+				.catch(reject);
+		});
+	},
+	initProfile(store: ActionContext<RootState, RootState>): Promise<void> {
+		if (profilePromise === null) {
+			profilePromise = new Promise((resolve, reject) => {
+				store.dispatch('loadProfile')
+					.then(() => {
+						if (!store.state.profileInitialized) {
+							store.commit('setProfileInitialized', true);
+						}
+
+						resolve();
+					})
+					.catch(reject);
+			});
+		}
+
+		return profilePromise;
+	},
+	loadProfileCategories(store: ActionContext<RootState, RootState>): Promise<void> {
+		return new Promise((resolve, reject) => {
+			if (!(store.state.profile && store.state.profile.id)) {
+				return reject(Error('No worker id found!'));
+			}
+
+			getWorkerCategoriesByWorkerId(this.app.apolloProvider.defaultClient, store.state.profile.id)
+				.then((cats) => {
+					store.commit('setProfileCategories', cats);
+					resolve();
+				})
+				.catch(reject);
+		});
+	},
+	addProfileCategories(store: ActionContext<RootState, RootState>, categoryIds: number[]): Promise<void> {
+		return new Promise((resolve, reject) => {
+			if (!(store.state.profile && store.state.profile.id)) {
+				return reject(Error('No worker id found!'));
+			}
+
+			createWorkerCategories(this.app.apolloProvider.defaultClient, store.state.profile.id, categoryIds)
+				.then(() => {
+					store.dispatch('loadProfileCategories')
+						.then(() => {
+							resolve();
+						})
+						.catch(reject);
+				})
+				.catch(reject);
+		});
+	},
+	removeProfileCategories(store: ActionContext<RootState, RootState>, categoryIds: number[]): Promise<void> {
+		return new Promise((resolve, reject) => {
+			if (!(store.state.profile && store.state.profile.id)) {
+				return reject(Error('No worker id found!'));
+			}
+
+			deleteWorkerCategories(this.app.apolloProvider.defaultClient, store.state.profile.id, categoryIds)
+				.then(() => {
+					store.dispatch('loadProfileCategories')
+						.then(() => {
+							resolve();
+						})
+						.catch(reject);
 				})
 				.catch(reject);
 		});

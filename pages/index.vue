@@ -45,6 +45,7 @@
 				</div>
 				<worker-filter
 					class="profiles__filters"
+					show-all
 					@change="handleFilterChange"
 				/>
 			</div>

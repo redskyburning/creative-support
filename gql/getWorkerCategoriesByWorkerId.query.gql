@@ -1,0 +1,9 @@
+query getWorkerCategoriesByWorkerId($workerId: uuid!) {
+	worker_category(where: {worker_id: {_eq: $workerId}}) {
+		worker_id
+		category {
+			id
+			name
+		}
+	}
+}

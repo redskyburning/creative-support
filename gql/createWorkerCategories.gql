@@ -1,0 +1,13 @@
+mutation createWorkerCategories(
+	$objects: [worker_category_insert_input!]!,
+) {
+	insert_worker_category(objects: $objects) {
+		returning {
+			worker_id
+			category {
+				id
+				name
+			}
+		}
+	}
+}
